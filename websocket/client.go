@@ -1,17 +1,58 @@
-package wssClient
+package websocket
 
 import (
 	"context"
 	"encoding/json"
 	"fmt"
 	"log"
+	"sync"
+	"time"
 
+	"github.com/qiwi1272/ethereal-go/pb"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
 	"nhooyr.io/websocket"
 )
 
-const baseURL string = "wss://ws2.etherealtest.net/v1/stream"
+type Environment string
+
+const (
+	Testnet Environment = "wss://ws2.etherealtest.net/v1/stream"
+	Mainnet Environment = "wss://ws2.ethereal.trade/v1/stream"
+)
+
+type Client struct {
+	Con                *websocket.Conn
+	conMu              *sync.Mutex
+	env                Environment
+	bookHandler        func(*pb.L2Book)      // non-array
+	priceHandler       func(*pb.MarketPrice) // non-array
+	tradeFillHandler   func(*pb.TradeFillEvent)
+	liquidationHandler func(*pb.SubaccountLiquidationEvent)
+	orderUpdateHandler func(*pb.OrderUpdateEvent)
+	orderFillHandler   func(*pb.OrderFillEvent)
+	transferHandler    func(*pb.Transfer) // non-array
+	hbCancel           context.CancelCauseFunc
+}
+
+func NewClient(parent context.Context, env Environment) *Client {
+	ctx, cancel := context.WithCancelCause(parent)
+	c, _, err := websocket.Dial(ctx, string(env), nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	cl := &Client{
+		Con:   c,
+		conMu: &sync.Mutex{},
+		env:   env,
+	}
+
+	cl.keepalive(ctx, cancel)
+	cl.hbCancel = cancel
+
+	return cl
+}
 
 type Intent string
 
@@ -20,69 +61,12 @@ const (
 	unsub Intent = "unsubscribe"
 )
 
-type eventData interface{}
-
-type SymbolEvent struct {
-	eventData
-	T string `json:"type"`
-	S string `json:"symbol"`
-}
-
-type SubaccountEvent struct {
-	eventData
-	T string `json:"type"`
-	S string `json:"subaccountId"`
-}
-
 type SubIntent[T eventData] struct {
 	I Intent    `json:"event"`
 	D eventData `json:"data"`
 }
 
-type EventType int
-
-const (
-	EventUnknown EventType = iota
-	EventL2Book
-	EventMarketPrice
-	EventTradeFill
-	EventSubaccountLiquidation
-	EventOrderUpdate
-	EventOrderFill
-	EventTokenTransfer
-)
-
-var eventTypeMap = map[string]EventType{
-	"L2Book":                EventL2Book,
-	"MarketPrice":           EventMarketPrice,
-	"TradeFill":             EventTradeFill,
-	"SubaccountLiquidation": EventSubaccountLiquidation,
-	"OrderUpdate":           EventOrderUpdate,
-	"OrderFill":             EventOrderFill,
-	"TokenTransfer":         EventTokenTransfer,
-}
-
-type Client struct {
-	Con                *websocket.Conn
-	bookHandler        func(*L2Book)      // non-array
-	priceHandler       func(*MarketPrice) // non-array
-	tradeFillHandler   func(*TradeFillEvent)
-	liquidationHandler func(*SubaccountLiquidationEvent)
-	orderUpdateHandler func(*OrderUpdateEvent)
-	orderFillHandler   func(*OrderFillEvent)
-	transferHandler    func(*Transfer) // non-array
-}
-
-func NewClient(ctx context.Context) *Client {
-	c, _, err := websocket.Dial(ctx, baseURL, nil)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	return &Client{Con: c}
-}
-
-func marshalSubscribe[T eventData](data T) (b []byte, err error) {
+func marshalSubscribe[T eventData, I Intent](data T) (b []byte, err error) {
 	req := &SubIntent[T]{I: sub, D: data}
 	return json.Marshal(req)
 }
@@ -100,18 +84,19 @@ func marshalToValueCallback[T proto.Message](data []byte, pb T, cb func(T)) (err
 	return
 }
 
-// func marshalToArrayCallback[T proto.Message](data []byte, pb EventMessageArray, parse func() T, cb func(T)) (err error) {
-// 	if err := protojson.Unmarshal(data, &pb); err != nil {
-// 		return err
-// 	}
-// 	for _, eventMsg := range pb.Data {
-// 		a := parse()
-// 		a = *eventMsg
-// 	}
-// 	parse()
-// 	cb(pb)
-// 	return
-// }
+type eventData interface{}
+
+type SymbolEvent struct {
+	eventData
+	T string `json:"type"`
+	S string `json:"symbol"`
+}
+
+type SubaccountEvent struct {
+	eventData
+	T string `json:"type"`
+	S string `json:"subaccountId"`
+}
 
 func (c *Client) req(ctx context.Context, payload []byte) (err error) {
 	return c.Con.Write(ctx, websocket.MessageBinary, payload)
@@ -271,31 +256,31 @@ func (c *Client) UnsubscribeTokenTransfer(ctx context.Context, subaccountUuid st
 	return c.req(ctx, b)
 }
 
-func (c *Client) OnBook(callback func(*L2Book)) {
+func (c *Client) OnBook(callback func(*pb.L2Book)) {
 	c.bookHandler = callback
 }
 
-func (c *Client) OnPrice(callback func(*MarketPrice)) {
+func (c *Client) OnPrice(callback func(*pb.MarketPrice)) {
 	c.priceHandler = callback
 }
 
-func (c *Client) OnTradeFill(callback func(*TradeFillEvent)) {
+func (c *Client) OnTradeFill(callback func(*pb.TradeFillEvent)) {
 	c.tradeFillHandler = callback
 }
 
-func (c *Client) OnLiquidation(callback func(*SubaccountLiquidationEvent)) {
+func (c *Client) OnLiquidation(callback func(*pb.SubaccountLiquidationEvent)) {
 	c.liquidationHandler = callback
 }
 
-func (c *Client) OnOrderUpdate(callback func(*OrderUpdateEvent)) {
+func (c *Client) OnOrderUpdate(callback func(*pb.OrderUpdateEvent)) {
 	c.orderUpdateHandler = callback
 }
 
-func (c *Client) OnOrderFill(callback func(*OrderFillEvent)) {
+func (c *Client) OnOrderFill(callback func(*pb.OrderFillEvent)) {
 	c.orderFillHandler = callback
 }
 
-func (c *Client) OnTransfer(callback func(*Transfer)) {
+func (c *Client) OnTransfer(callback func(*pb.Transfer)) {
 	c.transferHandler = callback
 }
 
@@ -326,58 +311,52 @@ func (c *Client) Listen(parent context.Context) error {
 			return err
 		}
 
-		var event EventType = EventUnknown
-		var ok bool
-		if event, ok = eventTypeMap[msg.Event]; !ok {
-			event = EventUnknown
-		}
-
-		switch event {
-		case EventL2Book:
-			var diff L2Book
+		switch msg.Event {
+		case "L2Book":
+			var diff pb.L2Book
 			if err := marshalToValueCallback(msg.Data, &diff, c.bookHandler); err != nil {
 				cancel(err)
 				return err
 			}
 
-		case EventMarketPrice:
-			var mp MarketPrice
+		case "MarketPrice":
+			var mp pb.MarketPrice
 			if err := marshalToValueCallback(msg.Data, &mp, c.priceHandler); err != nil {
 				cancel(err)
 				return err
 			}
 
-		case EventSubaccountLiquidation:
-			var lq SubaccountLiquidationEvent
+		case "SubaccountLiquidation":
+			var lq pb.SubaccountLiquidationEvent
 			if err := marshalToValueCallback(msg.Data, &lq, c.liquidationHandler); err != nil {
 				fmt.Println(string(data))
 				cancel(err)
 				return err
 			}
 
-		case EventOrderFill:
-			var ou OrderFillEvent
+		case "OrderFill":
+			var ou pb.OrderFillEvent
 			if err := marshalToValueCallback(data, &ou, c.orderFillHandler); err != nil {
 				cancel(err)
 				return err
 			}
 
-		case EventOrderUpdate:
-			var ou OrderUpdateEvent
+		case "OrderUpdate":
+			var ou pb.OrderUpdateEvent
 			if err := marshalToValueCallback(data, &ou, c.orderUpdateHandler); err != nil {
 				cancel(err)
 				return err
 			}
 
-		case EventTradeFill:
-			var tf TradeFillEvent
+		case "TradeFill":
+			var tf pb.TradeFillEvent
 			if err := marshalToValueCallback(data, &tf, c.tradeFillHandler); err != nil {
 				cancel(err)
 				return err
 			}
 
-		case EventTokenTransfer:
-			var t Transfer
+		case "TokenTransfer":
+			var t pb.Transfer
 			if err := marshalToValueCallback(data, &t, c.transferHandler); err != nil {
 				fmt.Println(string(data))
 				cancel(err)
@@ -390,6 +369,53 @@ func (c *Client) Listen(parent context.Context) error {
 	}
 }
 
+func (c *Client) keepalive(ctx context.Context, cancel context.CancelCauseFunc) {
+	go func() {
+		t := time.NewTicker(20 * time.Second)
+		defer t.Stop()
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			case <-t.C:
+				// Ping will return error if connection is dead
+				if err := c.Con.Ping(ctx); err != nil {
+					cancel(err)
+					return
+				}
+			}
+		}
+	}()
+}
+
+func (c *Client) Resubscribe(parent context.Context) error {
+	c.Close()
+
+	c.conMu.Lock()
+	defer c.conMu.Unlock()
+
+	ctx, cancel := context.WithCancelCause(parent)
+
+	// replace con and restart listener with new context
+	var err error
+	c.Con, _, err = websocket.Dial(ctx, string(c.env), nil)
+	if err != nil {
+		cancel(err)
+		return err
+	}
+	c.hbCancel = cancel
+	c.keepalive(ctx, cancel)
+
+	return nil
+}
+
 func (c *Client) Close() {
-	c.Con.Close(websocket.StatusNormalClosure, "<3")
+	c.conMu.Lock()
+	defer c.conMu.Unlock()
+	if c.hbCancel != nil {
+		c.hbCancel(nil)
+	}
+	if c.Con != nil {
+		c.Con.Close(websocket.StatusNormalClosure, "closing")
+	}
 }
