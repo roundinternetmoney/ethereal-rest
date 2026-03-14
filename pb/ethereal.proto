@@ -6,12 +6,21 @@ package rim.v1.ethereal;
 
 import "google/protobuf/struct.proto";
 
+enum EventType {
+  EVENT_TYPE_UNSPECIFIED = 0;
+  EVENT_TYPE_L2_BOOK = 1;
+  EVENT_TYPE_MARKET_PRICE = 2;
+  EVENT_TYPE_SUBACCOUNT_LIQUIDATION = 3;
+  EVENT_TYPE_ORDER_FILL = 4;
+  EVENT_TYPE_ORDER_UPDATE = 5;
+  EVENT_TYPE_TRADE_FILL = 6;
+  EVENT_TYPE_TRANSFER = 7;
+}
+
 message L2Book {
     string s = 1;
     int64 t = 2;
-    int64 pt = 3;
-    string bid_amt = 4;
-    string ask_amt = 5;
+    optional int64 pt = 3;
     repeated google.protobuf.ListValue a = 6;
     repeated google.protobuf.ListValue b = 7;
 }
@@ -112,11 +121,6 @@ message Transfer {
 message EventMessage {
     string e = 1;
     int64 t = 2;
-    oneof data {
-        MarketPrice market_price = 6;
-        L2Book book_diff = 7;
-        Transfer transfer = 12;
-    };  
 }
 
 // proto array events //
@@ -144,4 +148,15 @@ message SubaccountLiquidationEvent {
     string e = 1;
     int64 t = 2;
     SubaccountLiquidation data = 3;  
+}
+
+message WebsocketMessage {
+    string e = 1;
+    int64 t = 2;
+    google.protobuf.Struct data = 3;
+} 
+
+message WebsocketStatus {
+    bool ok = 1;
+    string code = 2;
 }
