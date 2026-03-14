@@ -49,9 +49,7 @@ func main() {
 	}
 
 	// many different subscription examples, all achieving the same result.
-	// error channel for callbacks, ethereal.Subscription namespace, "resubscribe" intent
 
-	// for all exchange symbols
 	for symbolKey := range symbols {
 		// callbacks here are overwritten every iteration.
 		// subscribe to book with a protobuf enum, and callback to diffCB
