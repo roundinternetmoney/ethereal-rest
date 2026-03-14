@@ -25,37 +25,40 @@ const (
 type EventType int32
 
 const (
-	EventType_EVENT_TYPE_UNSPECIFIED            EventType = 0
-	EventType_EVENT_TYPE_L2_BOOK                EventType = 1
-	EventType_EVENT_TYPE_MARKET_PRICE           EventType = 2
-	EventType_EVENT_TYPE_SUBACCOUNT_LIQUIDATION EventType = 3
-	EventType_EVENT_TYPE_ORDER_FILL             EventType = 4
-	EventType_EVENT_TYPE_ORDER_UPDATE           EventType = 5
-	EventType_EVENT_TYPE_TRADE_FILL             EventType = 6
-	EventType_EVENT_TYPE_TRANSFER               EventType = 7
+	EventType_EVENT_UNSPECIFIED      EventType = 0
+	EventType_L2_BOOK                EventType = 1
+	EventType_TICKER                 EventType = 2
+	EventType_TRADE_FILL             EventType = 3
+	EventType_SUBACCOUNT_LIQUIDATION EventType = 4
+	EventType_POSITION_UPDATE        EventType = 5
+	EventType_ORDER_UPDATE           EventType = 6
+	EventType_ORDER_FILL             EventType = 7
+	EventType_TOKEN_TRANSFER         EventType = 8
 )
 
 // Enum value maps for EventType.
 var (
 	EventType_name = map[int32]string{
-		0: "EVENT_TYPE_UNSPECIFIED",
-		1: "EVENT_TYPE_L2_BOOK",
-		2: "EVENT_TYPE_MARKET_PRICE",
-		3: "EVENT_TYPE_SUBACCOUNT_LIQUIDATION",
-		4: "EVENT_TYPE_ORDER_FILL",
-		5: "EVENT_TYPE_ORDER_UPDATE",
-		6: "EVENT_TYPE_TRADE_FILL",
-		7: "EVENT_TYPE_TRANSFER",
+		0: "EVENT_UNSPECIFIED",
+		1: "L2_BOOK",
+		2: "TICKER",
+		3: "TRADE_FILL",
+		4: "SUBACCOUNT_LIQUIDATION",
+		5: "POSITION_UPDATE",
+		6: "ORDER_UPDATE",
+		7: "ORDER_FILL",
+		8: "TOKEN_TRANSFER",
 	}
 	EventType_value = map[string]int32{
-		"EVENT_TYPE_UNSPECIFIED":            0,
-		"EVENT_TYPE_L2_BOOK":                1,
-		"EVENT_TYPE_MARKET_PRICE":           2,
-		"EVENT_TYPE_SUBACCOUNT_LIQUIDATION": 3,
-		"EVENT_TYPE_ORDER_FILL":             4,
-		"EVENT_TYPE_ORDER_UPDATE":           5,
-		"EVENT_TYPE_TRADE_FILL":             6,
-		"EVENT_TYPE_TRANSFER":               7,
+		"EVENT_UNSPECIFIED":      0,
+		"L2_BOOK":                1,
+		"TICKER":                 2,
+		"TRADE_FILL":             3,
+		"SUBACCOUNT_LIQUIDATION": 4,
+		"POSITION_UPDATE":        5,
+		"ORDER_UPDATE":           6,
+		"ORDER_FILL":             7,
+		"TOKEN_TRANSFER":         8,
 	}
 )
 
@@ -86,13 +89,109 @@ func (EventType) EnumDescriptor() ([]byte, []int) {
 	return file_ethereal_proto_rawDescGZIP(), []int{0}
 }
 
+type Side int32
+
+const (
+	Side_SIDE_UNSPECIFIED Side = 0
+	Side_BUY              Side = 1
+	Side_SELL             Side = 2
+)
+
+// Enum value maps for Side.
+var (
+	Side_name = map[int32]string{
+		0: "SIDE_UNSPECIFIED",
+		1: "BUY",
+		2: "SELL",
+	}
+	Side_value = map[string]int32{
+		"SIDE_UNSPECIFIED": 0,
+		"BUY":              1,
+		"SELL":             2,
+	}
+)
+
+func (x Side) Enum() *Side {
+	p := new(Side)
+	*p = x
+	return p
+}
+
+func (x Side) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (Side) Descriptor() protoreflect.EnumDescriptor {
+	return file_ethereal_proto_enumTypes[1].Descriptor()
+}
+
+func (Side) Type() protoreflect.EnumType {
+	return &file_ethereal_proto_enumTypes[1]
+}
+
+func (x Side) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use Side.Descriptor instead.
+func (Side) EnumDescriptor() ([]byte, []int) {
+	return file_ethereal_proto_rawDescGZIP(), []int{1}
+}
+
+type OrderType int32
+
+const (
+	OrderType_ORDER_TYPE_UNSPECIFIED OrderType = 0
+	OrderType_LIMIT                  OrderType = 1
+	OrderType_MARKET                 OrderType = 2
+)
+
+// Enum value maps for OrderType.
+var (
+	OrderType_name = map[int32]string{
+		0: "ORDER_TYPE_UNSPECIFIED",
+		1: "LIMIT",
+		2: "MARKET",
+	}
+	OrderType_value = map[string]int32{
+		"ORDER_TYPE_UNSPECIFIED": 0,
+		"LIMIT":                  1,
+		"MARKET":                 2,
+	}
+)
+
+func (x OrderType) Enum() *OrderType {
+	p := new(OrderType)
+	*p = x
+	return p
+}
+
+func (x OrderType) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (OrderType) Descriptor() protoreflect.EnumDescriptor {
+	return file_ethereal_proto_enumTypes[2].Descriptor()
+}
+
+func (OrderType) Type() protoreflect.EnumType {
+	return &file_ethereal_proto_enumTypes[2]
+}
+
+func (x OrderType) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use OrderType.Descriptor instead.
+func (OrderType) EnumDescriptor() ([]byte, []int) {
+	return file_ethereal_proto_rawDescGZIP(), []int{2}
+}
+
 type L2Book struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	S             string                 `protobuf:"bytes,1,opt,name=s,proto3" json:"s,omitempty"`
+	E             string                 `protobuf:"bytes,1,opt,name=e,proto3" json:"e,omitempty"`
 	T             int64                  `protobuf:"varint,2,opt,name=t,proto3" json:"t,omitempty"`
-	Pt            *int64                 `protobuf:"varint,3,opt,name=pt,proto3,oneof" json:"pt,omitempty"`
-	A             []*structpb.ListValue  `protobuf:"bytes,6,rep,name=a,proto3" json:"a,omitempty"`
-	B             []*structpb.ListValue  `protobuf:"bytes,7,rep,name=b,proto3" json:"b,omitempty"`
+	Data          *L2Book_Data           `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -127,9 +226,9 @@ func (*L2Book) Descriptor() ([]byte, []int) {
 	return file_ethereal_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *L2Book) GetS() string {
+func (x *L2Book) GetE() string {
 	if x != nil {
-		return x.S
+		return x.E
 	}
 	return ""
 }
@@ -141,54 +240,36 @@ func (x *L2Book) GetT() int64 {
 	return 0
 }
 
-func (x *L2Book) GetPt() int64 {
-	if x != nil && x.Pt != nil {
-		return *x.Pt
-	}
-	return 0
-}
-
-func (x *L2Book) GetA() []*structpb.ListValue {
+func (x *L2Book) GetData() *L2Book_Data {
 	if x != nil {
-		return x.A
+		return x.Data
 	}
 	return nil
 }
 
-func (x *L2Book) GetB() []*structpb.ListValue {
-	if x != nil {
-		return x.B
-	}
-	return nil
-}
-
-type MarketPrice struct {
+type Ticker struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	S             string                 `protobuf:"bytes,1,opt,name=s,proto3" json:"s,omitempty"`
-	BidPx         string                 `protobuf:"bytes,2,opt,name=bid_px,json=bidPx,proto3" json:"bid_px,omitempty"`
-	AskPx         string                 `protobuf:"bytes,3,opt,name=ask_px,json=askPx,proto3" json:"ask_px,omitempty"`
-	BidAmt        string                 `protobuf:"bytes,4,opt,name=bid_amt,json=bidAmt,proto3" json:"bid_amt,omitempty"`
-	AskAmt        string                 `protobuf:"bytes,5,opt,name=ask_amt,json=askAmt,proto3" json:"ask_amt,omitempty"`
-	MarkPx        string                 `protobuf:"bytes,6,opt,name=mark_px,json=markPx,proto3" json:"mark_px,omitempty"`
-	Mark24HPx     string                 `protobuf:"bytes,7,opt,name=mark24h_px,json=mark24hPx,proto3" json:"mark24h_px,omitempty"`
+	E             string                 `protobuf:"bytes,1,opt,name=e,proto3" json:"e,omitempty"`
+	T             int64                  `protobuf:"varint,2,opt,name=t,proto3" json:"t,omitempty"`
+	Data          *Ticker_Data           `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *MarketPrice) Reset() {
-	*x = MarketPrice{}
+func (x *Ticker) Reset() {
+	*x = Ticker{}
 	mi := &file_ethereal_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *MarketPrice) String() string {
+func (x *Ticker) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*MarketPrice) ProtoMessage() {}
+func (*Ticker) ProtoMessage() {}
 
-func (x *MarketPrice) ProtoReflect() protoreflect.Message {
+func (x *Ticker) ProtoReflect() protoreflect.Message {
 	mi := &file_ethereal_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -200,147 +281,44 @@ func (x *MarketPrice) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use MarketPrice.ProtoReflect.Descriptor instead.
-func (*MarketPrice) Descriptor() ([]byte, []int) {
+// Deprecated: Use Ticker.ProtoReflect.Descriptor instead.
+func (*Ticker) Descriptor() ([]byte, []int) {
 	return file_ethereal_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *MarketPrice) GetS() string {
+func (x *Ticker) GetE() string {
 	if x != nil {
-		return x.S
+		return x.E
 	}
 	return ""
 }
 
-func (x *MarketPrice) GetBidPx() string {
+func (x *Ticker) GetT() int64 {
 	if x != nil {
-		return x.BidPx
-	}
-	return ""
-}
-
-func (x *MarketPrice) GetAskPx() string {
-	if x != nil {
-		return x.AskPx
-	}
-	return ""
-}
-
-func (x *MarketPrice) GetBidAmt() string {
-	if x != nil {
-		return x.BidAmt
-	}
-	return ""
-}
-
-func (x *MarketPrice) GetAskAmt() string {
-	if x != nil {
-		return x.AskAmt
-	}
-	return ""
-}
-
-func (x *MarketPrice) GetMarkPx() string {
-	if x != nil {
-		return x.MarkPx
-	}
-	return ""
-}
-
-func (x *MarketPrice) GetMark24HPx() string {
-	if x != nil {
-		return x.Mark24HPx
-	}
-	return ""
-}
-
-type Fill struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Px            string                 `protobuf:"bytes,2,opt,name=px,proto3" json:"px,omitempty"`
-	Sz            string                 `protobuf:"bytes,3,opt,name=sz,proto3" json:"sz,omitempty"`
-	Sd            int32                  `protobuf:"varint,4,opt,name=sd,proto3" json:"sd,omitempty"`    // todo: side enum. theres 2 more below. 0/1 val
-	Sids          []string               `protobuf:"bytes,5,rep,name=sids,proto3" json:"sids,omitempty"` // [taker maker]
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *Fill) Reset() {
-	*x = Fill{}
-	mi := &file_ethereal_proto_msgTypes[2]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *Fill) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Fill) ProtoMessage() {}
-
-func (x *Fill) ProtoReflect() protoreflect.Message {
-	mi := &file_ethereal_proto_msgTypes[2]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Fill.ProtoReflect.Descriptor instead.
-func (*Fill) Descriptor() ([]byte, []int) {
-	return file_ethereal_proto_rawDescGZIP(), []int{2}
-}
-
-func (x *Fill) GetId() string {
-	if x != nil {
-		return x.Id
-	}
-	return ""
-}
-
-func (x *Fill) GetPx() string {
-	if x != nil {
-		return x.Px
-	}
-	return ""
-}
-
-func (x *Fill) GetSz() string {
-	if x != nil {
-		return x.Sz
-	}
-	return ""
-}
-
-func (x *Fill) GetSd() int32 {
-	if x != nil {
-		return x.Sd
+		return x.T
 	}
 	return 0
 }
 
-func (x *Fill) GetSids() []string {
+func (x *Ticker) GetData() *Ticker_Data {
 	if x != nil {
-		return x.Sids
+		return x.Data
 	}
 	return nil
 }
 
 type TradeFill struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	S             string                 `protobuf:"bytes,1,opt,name=s,proto3" json:"s,omitempty"`
-	Fills         []*Fill                `protobuf:"bytes,5,rep,name=fills,proto3" json:"fills,omitempty"`
+	E             string                 `protobuf:"bytes,1,opt,name=e,proto3" json:"e,omitempty"`
+	T             int64                  `protobuf:"varint,2,opt,name=t,proto3" json:"t,omitempty"`
+	Data          *TradeFill_Data        `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *TradeFill) Reset() {
 	*x = TradeFill{}
-	mi := &file_ethereal_proto_msgTypes[3]
+	mi := &file_ethereal_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -352,7 +330,7 @@ func (x *TradeFill) String() string {
 func (*TradeFill) ProtoMessage() {}
 
 func (x *TradeFill) ProtoReflect() protoreflect.Message {
-	mi := &file_ethereal_proto_msgTypes[3]
+	mi := &file_ethereal_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -365,94 +343,42 @@ func (x *TradeFill) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TradeFill.ProtoReflect.Descriptor instead.
 func (*TradeFill) Descriptor() ([]byte, []int) {
-	return file_ethereal_proto_rawDescGZIP(), []int{3}
+	return file_ethereal_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *TradeFill) GetS() string {
+func (x *TradeFill) GetE() string {
 	if x != nil {
-		return x.S
+		return x.E
 	}
 	return ""
 }
 
-func (x *TradeFill) GetFills() []*Fill {
+func (x *TradeFill) GetT() int64 {
 	if x != nil {
-		return x.Fills
+		return x.T
+	}
+	return 0
+}
+
+func (x *TradeFill) GetData() *TradeFill_Data {
+	if x != nil {
+		return x.Data
 	}
 	return nil
 }
 
-type LiquidationItem struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	S             string                 `protobuf:"bytes,1,opt,name=s,proto3" json:"s,omitempty"`
-	Px            string                 `protobuf:"bytes,2,opt,name=px,proto3" json:"px,omitempty"`
-	Sz            string                 `protobuf:"bytes,3,opt,name=sz,proto3" json:"sz,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *LiquidationItem) Reset() {
-	*x = LiquidationItem{}
-	mi := &file_ethereal_proto_msgTypes[4]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *LiquidationItem) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*LiquidationItem) ProtoMessage() {}
-
-func (x *LiquidationItem) ProtoReflect() protoreflect.Message {
-	mi := &file_ethereal_proto_msgTypes[4]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use LiquidationItem.ProtoReflect.Descriptor instead.
-func (*LiquidationItem) Descriptor() ([]byte, []int) {
-	return file_ethereal_proto_rawDescGZIP(), []int{4}
-}
-
-func (x *LiquidationItem) GetS() string {
-	if x != nil {
-		return x.S
-	}
-	return ""
-}
-
-func (x *LiquidationItem) GetPx() string {
-	if x != nil {
-		return x.Px
-	}
-	return ""
-}
-
-func (x *LiquidationItem) GetSz() string {
-	if x != nil {
-		return x.Sz
-	}
-	return ""
-}
-
 type SubaccountLiquidation struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Sid           string                 `protobuf:"bytes,1,opt,name=sid,proto3" json:"sid,omitempty"`
-	P             []*LiquidationItem     `protobuf:"bytes,2,rep,name=p,proto3" json:"p,omitempty"`
+	state         protoimpl.MessageState      `protogen:"open.v1"`
+	E             string                      `protobuf:"bytes,1,opt,name=e,proto3" json:"e,omitempty"`
+	T             int64                       `protobuf:"varint,2,opt,name=t,proto3" json:"t,omitempty"`
+	Data          *SubaccountLiquidation_Data `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *SubaccountLiquidation) Reset() {
 	*x = SubaccountLiquidation{}
-	mi := &file_ethereal_proto_msgTypes[5]
+	mi := &file_ethereal_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -464,7 +390,7 @@ func (x *SubaccountLiquidation) String() string {
 func (*SubaccountLiquidation) ProtoMessage() {}
 
 func (x *SubaccountLiquidation) ProtoReflect() protoreflect.Message {
-	mi := &file_ethereal_proto_msgTypes[5]
+	mi := &file_ethereal_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -477,57 +403,102 @@ func (x *SubaccountLiquidation) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SubaccountLiquidation.ProtoReflect.Descriptor instead.
 func (*SubaccountLiquidation) Descriptor() ([]byte, []int) {
-	return file_ethereal_proto_rawDescGZIP(), []int{5}
+	return file_ethereal_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *SubaccountLiquidation) GetSid() string {
+func (x *SubaccountLiquidation) GetE() string {
 	if x != nil {
-		return x.Sid
+		return x.E
 	}
 	return ""
 }
 
-func (x *SubaccountLiquidation) GetP() []*LiquidationItem {
+func (x *SubaccountLiquidation) GetT() int64 {
 	if x != nil {
-		return x.P
+		return x.T
+	}
+	return 0
+}
+
+func (x *SubaccountLiquidation) GetData() *SubaccountLiquidation_Data {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type PositionUpdate struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	E             string                 `protobuf:"bytes,1,opt,name=e,proto3" json:"e,omitempty"`
+	T             int64                  `protobuf:"varint,2,opt,name=t,proto3" json:"t,omitempty"`
+	Data          *PositionUpdate_Data   `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PositionUpdate) Reset() {
+	*x = PositionUpdate{}
+	mi := &file_ethereal_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PositionUpdate) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PositionUpdate) ProtoMessage() {}
+
+func (x *PositionUpdate) ProtoReflect() protoreflect.Message {
+	mi := &file_ethereal_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PositionUpdate.ProtoReflect.Descriptor instead.
+func (*PositionUpdate) Descriptor() ([]byte, []int) {
+	return file_ethereal_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *PositionUpdate) GetE() string {
+	if x != nil {
+		return x.E
+	}
+	return ""
+}
+
+func (x *PositionUpdate) GetT() int64 {
+	if x != nil {
+		return x.T
+	}
+	return 0
+}
+
+func (x *PositionUpdate) GetData() *PositionUpdate_Data {
+	if x != nil {
+		return x.Data
 	}
 	return nil
 }
 
 type OrderUpdate struct {
-	state                protoimpl.MessageState `protogen:"open.v1"`
-	Id                   string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	ClientOrderId        string                 `protobuf:"bytes,2,opt,name=client_order_id,json=clientOrderId,proto3" json:"client_order_id,omitempty"`
-	Type                 string                 `protobuf:"bytes,3,opt,name=type,proto3" json:"type,omitempty"`
-	AvailableQuantity    string                 `protobuf:"bytes,4,opt,name=available_quantity,json=availableQuantity,proto3" json:"available_quantity,omitempty"`
-	Quantity             string                 `protobuf:"bytes,5,opt,name=quantity,proto3" json:"quantity,omitempty"`
-	Side                 int32                  `protobuf:"varint,6,opt,name=side,proto3" json:"side,omitempty"`
-	ProductId            string                 `protobuf:"bytes,7,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
-	SubaccountId         string                 `protobuf:"bytes,8,opt,name=subaccount_id,json=subaccountId,proto3" json:"subaccount_id,omitempty"`
-	Status               string                 `protobuf:"bytes,9,opt,name=status,proto3" json:"status,omitempty"`
-	ReduceOnly           bool                   `protobuf:"varint,10,opt,name=reduce_only,json=reduceOnly,proto3" json:"reduce_only,omitempty"`
-	Close                bool                   `protobuf:"varint,11,opt,name=close,proto3" json:"close,omitempty"`
-	UpdatedAt            int64                  `protobuf:"varint,12,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
-	CreatedAt            int64                  `protobuf:"varint,13,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	Sender               string                 `protobuf:"bytes,14,opt,name=sender,proto3" json:"sender,omitempty"`
-	Price                string                 `protobuf:"bytes,15,opt,name=price,proto3" json:"price,omitempty"`
-	Filled               string                 `protobuf:"bytes,16,opt,name=filled,proto3" json:"filled,omitempty"`
-	StopPrice            string                 `protobuf:"bytes,17,opt,name=stop_price,json=stopPrice,proto3" json:"stop_price,omitempty"`
-	StopType             int64                  `protobuf:"varint,18,opt,name=stop_type,json=stopType,proto3" json:"stop_type,omitempty"`
-	StopPriceType        int64                  `protobuf:"varint,19,opt,name=stop_price_type,json=stopPriceType,proto3" json:"stop_price_type,omitempty"`
-	TimeInForce          string                 `protobuf:"bytes,20,opt,name=time_in_force,json=timeInForce,proto3" json:"time_in_force,omitempty"`
-	ExpiresAt            int64                  `protobuf:"varint,21,opt,name=expires_at,json=expiresAt,proto3" json:"expires_at,omitempty"`
-	PostOnly             bool                   `protobuf:"varint,22,opt,name=post_only,json=postOnly,proto3" json:"post_only,omitempty"`
-	GroupContingencyType int32                  `protobuf:"varint,23,opt,name=group_contingency_type,json=groupContingencyType,proto3" json:"group_contingency_type,omitempty"`
-	GroupId              string                 `protobuf:"bytes,24,opt,name=group_id,json=groupId,proto3" json:"group_id,omitempty"`
-	Triggered            string                 `protobuf:"bytes,25,opt,name=triggered,proto3" json:"triggered,omitempty"`
-	unknownFields        protoimpl.UnknownFields
-	sizeCache            protoimpl.SizeCache
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	E             string                 `protobuf:"bytes,1,opt,name=e,proto3" json:"e,omitempty"`
+	T             int64                  `protobuf:"varint,2,opt,name=t,proto3" json:"t,omitempty"`
+	Data          *OrderUpdate_Data      `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *OrderUpdate) Reset() {
 	*x = OrderUpdate{}
-	mi := &file_ethereal_proto_msgTypes[6]
+	mi := &file_ethereal_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -539,7 +510,7 @@ func (x *OrderUpdate) String() string {
 func (*OrderUpdate) ProtoMessage() {}
 
 func (x *OrderUpdate) ProtoReflect() protoreflect.Message {
-	mi := &file_ethereal_proto_msgTypes[6]
+	mi := &file_ethereal_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -552,206 +523,42 @@ func (x *OrderUpdate) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use OrderUpdate.ProtoReflect.Descriptor instead.
 func (*OrderUpdate) Descriptor() ([]byte, []int) {
-	return file_ethereal_proto_rawDescGZIP(), []int{6}
+	return file_ethereal_proto_rawDescGZIP(), []int{5}
 }
 
-func (x *OrderUpdate) GetId() string {
+func (x *OrderUpdate) GetE() string {
 	if x != nil {
-		return x.Id
+		return x.E
 	}
 	return ""
 }
 
-func (x *OrderUpdate) GetClientOrderId() string {
+func (x *OrderUpdate) GetT() int64 {
 	if x != nil {
-		return x.ClientOrderId
-	}
-	return ""
-}
-
-func (x *OrderUpdate) GetType() string {
-	if x != nil {
-		return x.Type
-	}
-	return ""
-}
-
-func (x *OrderUpdate) GetAvailableQuantity() string {
-	if x != nil {
-		return x.AvailableQuantity
-	}
-	return ""
-}
-
-func (x *OrderUpdate) GetQuantity() string {
-	if x != nil {
-		return x.Quantity
-	}
-	return ""
-}
-
-func (x *OrderUpdate) GetSide() int32 {
-	if x != nil {
-		return x.Side
+		return x.T
 	}
 	return 0
 }
 
-func (x *OrderUpdate) GetProductId() string {
+func (x *OrderUpdate) GetData() *OrderUpdate_Data {
 	if x != nil {
-		return x.ProductId
+		return x.Data
 	}
-	return ""
-}
-
-func (x *OrderUpdate) GetSubaccountId() string {
-	if x != nil {
-		return x.SubaccountId
-	}
-	return ""
-}
-
-func (x *OrderUpdate) GetStatus() string {
-	if x != nil {
-		return x.Status
-	}
-	return ""
-}
-
-func (x *OrderUpdate) GetReduceOnly() bool {
-	if x != nil {
-		return x.ReduceOnly
-	}
-	return false
-}
-
-func (x *OrderUpdate) GetClose() bool {
-	if x != nil {
-		return x.Close
-	}
-	return false
-}
-
-func (x *OrderUpdate) GetUpdatedAt() int64 {
-	if x != nil {
-		return x.UpdatedAt
-	}
-	return 0
-}
-
-func (x *OrderUpdate) GetCreatedAt() int64 {
-	if x != nil {
-		return x.CreatedAt
-	}
-	return 0
-}
-
-func (x *OrderUpdate) GetSender() string {
-	if x != nil {
-		return x.Sender
-	}
-	return ""
-}
-
-func (x *OrderUpdate) GetPrice() string {
-	if x != nil {
-		return x.Price
-	}
-	return ""
-}
-
-func (x *OrderUpdate) GetFilled() string {
-	if x != nil {
-		return x.Filled
-	}
-	return ""
-}
-
-func (x *OrderUpdate) GetStopPrice() string {
-	if x != nil {
-		return x.StopPrice
-	}
-	return ""
-}
-
-func (x *OrderUpdate) GetStopType() int64 {
-	if x != nil {
-		return x.StopType
-	}
-	return 0
-}
-
-func (x *OrderUpdate) GetStopPriceType() int64 {
-	if x != nil {
-		return x.StopPriceType
-	}
-	return 0
-}
-
-func (x *OrderUpdate) GetTimeInForce() string {
-	if x != nil {
-		return x.TimeInForce
-	}
-	return ""
-}
-
-func (x *OrderUpdate) GetExpiresAt() int64 {
-	if x != nil {
-		return x.ExpiresAt
-	}
-	return 0
-}
-
-func (x *OrderUpdate) GetPostOnly() bool {
-	if x != nil {
-		return x.PostOnly
-	}
-	return false
-}
-
-func (x *OrderUpdate) GetGroupContingencyType() int32 {
-	if x != nil {
-		return x.GroupContingencyType
-	}
-	return 0
-}
-
-func (x *OrderUpdate) GetGroupId() string {
-	if x != nil {
-		return x.GroupId
-	}
-	return ""
-}
-
-func (x *OrderUpdate) GetTriggered() string {
-	if x != nil {
-		return x.Triggered
-	}
-	return ""
+	return nil
 }
 
 type OrderFill struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	OrderId       string                 `protobuf:"bytes,2,opt,name=order_id,json=orderId,proto3" json:"order_id,omitempty"`
-	ClientOrderId string                 `protobuf:"bytes,3,opt,name=client_order_id,json=clientOrderId,proto3" json:"client_order_id,omitempty"`
-	Price         string                 `protobuf:"bytes,4,opt,name=price,proto3" json:"price,omitempty"`
-	Filled        string                 `protobuf:"bytes,5,opt,name=filled,proto3" json:"filled,omitempty"`
-	Type          string                 `protobuf:"bytes,6,opt,name=type,proto3" json:"type,omitempty"`
-	Side          int32                  `protobuf:"varint,7,opt,name=side,proto3" json:"side,omitempty"`
-	ReduceOnly    bool                   `protobuf:"varint,8,opt,name=reduce_only,json=reduceOnly,proto3" json:"reduce_only,omitempty"`
-	FeeUsd        string                 `protobuf:"bytes,9,opt,name=fee_usd,json=feeUsd,proto3" json:"fee_usd,omitempty"`
-	IsMaker       bool                   `protobuf:"varint,10,opt,name=is_maker,json=isMaker,proto3" json:"is_maker,omitempty"`
-	ProductId     string                 `protobuf:"bytes,11,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
-	SubaccountId  string                 `protobuf:"bytes,12,opt,name=subaccount_id,json=subaccountId,proto3" json:"subaccount_id,omitempty"`
-	CreatedAt     int64                  `protobuf:"varint,13,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	E             string                 `protobuf:"bytes,1,opt,name=e,proto3" json:"e,omitempty"`
+	T             int64                  `protobuf:"varint,2,opt,name=t,proto3" json:"t,omitempty"`
+	Data          *OrderFill_Data        `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *OrderFill) Reset() {
 	*x = OrderFill{}
-	mi := &file_ethereal_proto_msgTypes[7]
+	mi := &file_ethereal_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -763,7 +570,7 @@ func (x *OrderFill) String() string {
 func (*OrderFill) ProtoMessage() {}
 
 func (x *OrderFill) ProtoReflect() protoreflect.Message {
-	mi := &file_ethereal_proto_msgTypes[7]
+	mi := &file_ethereal_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -776,101 +583,1283 @@ func (x *OrderFill) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use OrderFill.ProtoReflect.Descriptor instead.
 func (*OrderFill) Descriptor() ([]byte, []int) {
+	return file_ethereal_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *OrderFill) GetE() string {
+	if x != nil {
+		return x.E
+	}
+	return ""
+}
+
+func (x *OrderFill) GetT() int64 {
+	if x != nil {
+		return x.T
+	}
+	return 0
+}
+
+func (x *OrderFill) GetData() *OrderFill_Data {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type TokenTransfer struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	E             string                 `protobuf:"bytes,1,opt,name=e,proto3" json:"e,omitempty"`
+	T             int64                  `protobuf:"varint,2,opt,name=t,proto3" json:"t,omitempty"`
+	Data          *TokenTransfer_Data    `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *TokenTransfer) Reset() {
+	*x = TokenTransfer{}
+	mi := &file_ethereal_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TokenTransfer) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TokenTransfer) ProtoMessage() {}
+
+func (x *TokenTransfer) ProtoReflect() protoreflect.Message {
+	mi := &file_ethereal_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TokenTransfer.ProtoReflect.Descriptor instead.
+func (*TokenTransfer) Descriptor() ([]byte, []int) {
 	return file_ethereal_proto_rawDescGZIP(), []int{7}
 }
 
-func (x *OrderFill) GetId() string {
+func (x *TokenTransfer) GetE() string {
+	if x != nil {
+		return x.E
+	}
+	return ""
+}
+
+func (x *TokenTransfer) GetT() int64 {
+	if x != nil {
+		return x.T
+	}
+	return 0
+}
+
+func (x *TokenTransfer) GetData() *TokenTransfer_Data {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type EventMessage struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	E             string                 `protobuf:"bytes,1,opt,name=e,proto3" json:"e,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *EventMessage) Reset() {
+	*x = EventMessage{}
+	mi := &file_ethereal_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *EventMessage) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EventMessage) ProtoMessage() {}
+
+func (x *EventMessage) ProtoReflect() protoreflect.Message {
+	mi := &file_ethereal_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EventMessage.ProtoReflect.Descriptor instead.
+func (*EventMessage) Descriptor() ([]byte, []int) {
+	return file_ethereal_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *EventMessage) GetE() string {
+	if x != nil {
+		return x.E
+	}
+	return ""
+}
+
+type WebsocketStatus struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Ok            bool                   `protobuf:"varint,1,opt,name=ok,proto3" json:"ok,omitempty"`
+	Code          string                 `protobuf:"bytes,2,opt,name=code,proto3" json:"code,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *WebsocketStatus) Reset() {
+	*x = WebsocketStatus{}
+	mi := &file_ethereal_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *WebsocketStatus) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WebsocketStatus) ProtoMessage() {}
+
+func (x *WebsocketStatus) ProtoReflect() protoreflect.Message {
+	mi := &file_ethereal_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WebsocketStatus.ProtoReflect.Descriptor instead.
+func (*WebsocketStatus) Descriptor() ([]byte, []int) {
+	return file_ethereal_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *WebsocketStatus) GetOk() bool {
+	if x != nil {
+		return x.Ok
+	}
+	return false
+}
+
+func (x *WebsocketStatus) GetCode() string {
+	if x != nil {
+		return x.Code
+	}
+	return ""
+}
+
+type L2Book_Data struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	S             string                 `protobuf:"bytes,1,opt,name=s,proto3" json:"s,omitempty"`
+	T             int64                  `protobuf:"varint,2,opt,name=t,proto3" json:"t,omitempty"`
+	Pt            *int64                 `protobuf:"varint,3,opt,name=pt,proto3,oneof" json:"pt,omitempty"`
+	A             []*structpb.ListValue  `protobuf:"bytes,6,rep,name=a,proto3" json:"a,omitempty"`
+	B             []*structpb.ListValue  `protobuf:"bytes,7,rep,name=b,proto3" json:"b,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *L2Book_Data) Reset() {
+	*x = L2Book_Data{}
+	mi := &file_ethereal_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *L2Book_Data) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*L2Book_Data) ProtoMessage() {}
+
+func (x *L2Book_Data) ProtoReflect() protoreflect.Message {
+	mi := &file_ethereal_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use L2Book_Data.ProtoReflect.Descriptor instead.
+func (*L2Book_Data) Descriptor() ([]byte, []int) {
+	return file_ethereal_proto_rawDescGZIP(), []int{0, 0}
+}
+
+func (x *L2Book_Data) GetS() string {
+	if x != nil {
+		return x.S
+	}
+	return ""
+}
+
+func (x *L2Book_Data) GetT() int64 {
+	if x != nil {
+		return x.T
+	}
+	return 0
+}
+
+func (x *L2Book_Data) GetPt() int64 {
+	if x != nil && x.Pt != nil {
+		return *x.Pt
+	}
+	return 0
+}
+
+func (x *L2Book_Data) GetA() []*structpb.ListValue {
+	if x != nil {
+		return x.A
+	}
+	return nil
+}
+
+func (x *L2Book_Data) GetB() []*structpb.ListValue {
+	if x != nil {
+		return x.B
+	}
+	return nil
+}
+
+type Ticker_Data struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	S             string                 `protobuf:"bytes,1,opt,name=s,proto3" json:"s,omitempty"`
+	T             int64                  `protobuf:"varint,2,opt,name=t,proto3" json:"t,omitempty"`
+	BidPx         *string                `protobuf:"bytes,3,opt,name=bid_px,json=bidPx,proto3,oneof" json:"bid_px,omitempty"`
+	AskPx         *string                `protobuf:"bytes,4,opt,name=ask_px,json=askPx,proto3,oneof" json:"ask_px,omitempty"`
+	BidAmt        *string                `protobuf:"bytes,5,opt,name=bid_amt,json=bidAmt,proto3,oneof" json:"bid_amt,omitempty"`
+	AskAmt        *string                `protobuf:"bytes,6,opt,name=ask_amt,json=askAmt,proto3,oneof" json:"ask_amt,omitempty"`
+	MarkPx        *string                `protobuf:"bytes,7,opt,name=mark_px,json=markPx,proto3,oneof" json:"mark_px,omitempty"`
+	MarkPx_24H    *string                `protobuf:"bytes,8,opt,name=mark_px_24h,json=markPx24h,proto3,oneof" json:"mark_px_24h,omitempty"`
+	Oi            *string                `protobuf:"bytes,9,opt,name=oi,proto3,oneof" json:"oi,omitempty"`
+	Fr1H          *string                `protobuf:"bytes,10,opt,name=fr1h,proto3,oneof" json:"fr1h,omitempty"`
+	Vol24H        *string                `protobuf:"bytes,11,opt,name=vol24h,proto3,oneof" json:"vol24h,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Ticker_Data) Reset() {
+	*x = Ticker_Data{}
+	mi := &file_ethereal_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Ticker_Data) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Ticker_Data) ProtoMessage() {}
+
+func (x *Ticker_Data) ProtoReflect() protoreflect.Message {
+	mi := &file_ethereal_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Ticker_Data.ProtoReflect.Descriptor instead.
+func (*Ticker_Data) Descriptor() ([]byte, []int) {
+	return file_ethereal_proto_rawDescGZIP(), []int{1, 0}
+}
+
+func (x *Ticker_Data) GetS() string {
+	if x != nil {
+		return x.S
+	}
+	return ""
+}
+
+func (x *Ticker_Data) GetT() int64 {
+	if x != nil {
+		return x.T
+	}
+	return 0
+}
+
+func (x *Ticker_Data) GetBidPx() string {
+	if x != nil && x.BidPx != nil {
+		return *x.BidPx
+	}
+	return ""
+}
+
+func (x *Ticker_Data) GetAskPx() string {
+	if x != nil && x.AskPx != nil {
+		return *x.AskPx
+	}
+	return ""
+}
+
+func (x *Ticker_Data) GetBidAmt() string {
+	if x != nil && x.BidAmt != nil {
+		return *x.BidAmt
+	}
+	return ""
+}
+
+func (x *Ticker_Data) GetAskAmt() string {
+	if x != nil && x.AskAmt != nil {
+		return *x.AskAmt
+	}
+	return ""
+}
+
+func (x *Ticker_Data) GetMarkPx() string {
+	if x != nil && x.MarkPx != nil {
+		return *x.MarkPx
+	}
+	return ""
+}
+
+func (x *Ticker_Data) GetMarkPx_24H() string {
+	if x != nil && x.MarkPx_24H != nil {
+		return *x.MarkPx_24H
+	}
+	return ""
+}
+
+func (x *Ticker_Data) GetOi() string {
+	if x != nil && x.Oi != nil {
+		return *x.Oi
+	}
+	return ""
+}
+
+func (x *Ticker_Data) GetFr1H() string {
+	if x != nil && x.Fr1H != nil {
+		return *x.Fr1H
+	}
+	return ""
+}
+
+func (x *Ticker_Data) GetVol24H() string {
+	if x != nil && x.Vol24H != nil {
+		return *x.Vol24H
+	}
+	return ""
+}
+
+type TradeFill_Data struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	S             string                 `protobuf:"bytes,1,opt,name=s,proto3" json:"s,omitempty"`
+	T             int64                  `protobuf:"varint,2,opt,name=t,proto3" json:"t,omitempty"`
+	Fills         []*TradeFill_Data_Fill `protobuf:"bytes,3,rep,name=fills,proto3" json:"fills,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *TradeFill_Data) Reset() {
+	*x = TradeFill_Data{}
+	mi := &file_ethereal_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TradeFill_Data) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TradeFill_Data) ProtoMessage() {}
+
+func (x *TradeFill_Data) ProtoReflect() protoreflect.Message {
+	mi := &file_ethereal_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TradeFill_Data.ProtoReflect.Descriptor instead.
+func (*TradeFill_Data) Descriptor() ([]byte, []int) {
+	return file_ethereal_proto_rawDescGZIP(), []int{2, 0}
+}
+
+func (x *TradeFill_Data) GetS() string {
+	if x != nil {
+		return x.S
+	}
+	return ""
+}
+
+func (x *TradeFill_Data) GetT() int64 {
+	if x != nil {
+		return x.T
+	}
+	return 0
+}
+
+func (x *TradeFill_Data) GetFills() []*TradeFill_Data_Fill {
+	if x != nil {
+		return x.Fills
+	}
+	return nil
+}
+
+type TradeFill_Data_Fill struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Px            string                 `protobuf:"bytes,2,opt,name=px,proto3" json:"px,omitempty"`
+	Sz            string                 `protobuf:"bytes,3,opt,name=sz,proto3" json:"sz,omitempty"`
+	Sd            Side                   `protobuf:"varint,4,opt,name=sd,proto3,enum=rim.v1.ethereal.Side" json:"sd,omitempty"`
+	Sids          []string               `protobuf:"bytes,5,rep,name=sids,proto3" json:"sids,omitempty"` // [taker maker]
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *TradeFill_Data_Fill) Reset() {
+	*x = TradeFill_Data_Fill{}
+	mi := &file_ethereal_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TradeFill_Data_Fill) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TradeFill_Data_Fill) ProtoMessage() {}
+
+func (x *TradeFill_Data_Fill) ProtoReflect() protoreflect.Message {
+	mi := &file_ethereal_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TradeFill_Data_Fill.ProtoReflect.Descriptor instead.
+func (*TradeFill_Data_Fill) Descriptor() ([]byte, []int) {
+	return file_ethereal_proto_rawDescGZIP(), []int{2, 0, 0}
+}
+
+func (x *TradeFill_Data_Fill) GetId() string {
 	if x != nil {
 		return x.Id
 	}
 	return ""
 }
 
-func (x *OrderFill) GetOrderId() string {
+func (x *TradeFill_Data_Fill) GetPx() string {
+	if x != nil {
+		return x.Px
+	}
+	return ""
+}
+
+func (x *TradeFill_Data_Fill) GetSz() string {
+	if x != nil {
+		return x.Sz
+	}
+	return ""
+}
+
+func (x *TradeFill_Data_Fill) GetSd() Side {
+	if x != nil {
+		return x.Sd
+	}
+	return Side_SIDE_UNSPECIFIED
+}
+
+func (x *TradeFill_Data_Fill) GetSids() []string {
+	if x != nil {
+		return x.Sids
+	}
+	return nil
+}
+
+type SubaccountLiquidation_Data struct {
+	state         protoimpl.MessageState                    `protogen:"open.v1"`
+	Sid           string                                    `protobuf:"bytes,1,opt,name=sid,proto3" json:"sid,omitempty"`
+	T             int64                                     `protobuf:"varint,2,opt,name=t,proto3" json:"t,omitempty"`
+	P             []*SubaccountLiquidation_Data_Liquidation `protobuf:"bytes,3,rep,name=p,proto3" json:"p,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SubaccountLiquidation_Data) Reset() {
+	*x = SubaccountLiquidation_Data{}
+	mi := &file_ethereal_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SubaccountLiquidation_Data) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SubaccountLiquidation_Data) ProtoMessage() {}
+
+func (x *SubaccountLiquidation_Data) ProtoReflect() protoreflect.Message {
+	mi := &file_ethereal_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SubaccountLiquidation_Data.ProtoReflect.Descriptor instead.
+func (*SubaccountLiquidation_Data) Descriptor() ([]byte, []int) {
+	return file_ethereal_proto_rawDescGZIP(), []int{3, 0}
+}
+
+func (x *SubaccountLiquidation_Data) GetSid() string {
+	if x != nil {
+		return x.Sid
+	}
+	return ""
+}
+
+func (x *SubaccountLiquidation_Data) GetT() int64 {
+	if x != nil {
+		return x.T
+	}
+	return 0
+}
+
+func (x *SubaccountLiquidation_Data) GetP() []*SubaccountLiquidation_Data_Liquidation {
+	if x != nil {
+		return x.P
+	}
+	return nil
+}
+
+type SubaccountLiquidation_Data_Liquidation struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	S             string                 `protobuf:"bytes,1,opt,name=s,proto3" json:"s,omitempty"`
+	Px            string                 `protobuf:"bytes,2,opt,name=px,proto3" json:"px,omitempty"`
+	Sz            string                 `protobuf:"bytes,3,opt,name=sz,proto3" json:"sz,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SubaccountLiquidation_Data_Liquidation) Reset() {
+	*x = SubaccountLiquidation_Data_Liquidation{}
+	mi := &file_ethereal_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SubaccountLiquidation_Data_Liquidation) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SubaccountLiquidation_Data_Liquidation) ProtoMessage() {}
+
+func (x *SubaccountLiquidation_Data_Liquidation) ProtoReflect() protoreflect.Message {
+	mi := &file_ethereal_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SubaccountLiquidation_Data_Liquidation.ProtoReflect.Descriptor instead.
+func (*SubaccountLiquidation_Data_Liquidation) Descriptor() ([]byte, []int) {
+	return file_ethereal_proto_rawDescGZIP(), []int{3, 0, 0}
+}
+
+func (x *SubaccountLiquidation_Data_Liquidation) GetS() string {
+	if x != nil {
+		return x.S
+	}
+	return ""
+}
+
+func (x *SubaccountLiquidation_Data_Liquidation) GetPx() string {
+	if x != nil {
+		return x.Px
+	}
+	return ""
+}
+
+func (x *SubaccountLiquidation_Data_Liquidation) GetSz() string {
+	if x != nil {
+		return x.Sz
+	}
+	return ""
+}
+
+type PositionUpdate_Data struct {
+	state         protoimpl.MessageState        `protogen:"open.v1"`
+	T             int64                         `protobuf:"varint,1,opt,name=t,proto3" json:"t,omitempty"`
+	D             []*PositionUpdate_Data_Update `protobuf:"bytes,2,rep,name=d,proto3" json:"d,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PositionUpdate_Data) Reset() {
+	*x = PositionUpdate_Data{}
+	mi := &file_ethereal_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PositionUpdate_Data) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PositionUpdate_Data) ProtoMessage() {}
+
+func (x *PositionUpdate_Data) ProtoReflect() protoreflect.Message {
+	mi := &file_ethereal_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PositionUpdate_Data.ProtoReflect.Descriptor instead.
+func (*PositionUpdate_Data) Descriptor() ([]byte, []int) {
+	return file_ethereal_proto_rawDescGZIP(), []int{4, 0}
+}
+
+func (x *PositionUpdate_Data) GetT() int64 {
+	if x != nil {
+		return x.T
+	}
+	return 0
+}
+
+func (x *PositionUpdate_Data) GetD() []*PositionUpdate_Data_Update {
+	if x != nil {
+		return x.D
+	}
+	return nil
+}
+
+type PositionUpdate_Data_Update struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Sid           string                 `protobuf:"bytes,2,opt,name=sid,proto3" json:"sid,omitempty"`
+	S             string                 `protobuf:"bytes,3,opt,name=s,proto3" json:"s,omitempty"`
+	Side          Side                   `protobuf:"varint,4,opt,name=side,proto3,enum=rim.v1.ethereal.Side" json:"side,omitempty"`
+	Sz            string                 `protobuf:"bytes,5,opt,name=sz,proto3" json:"sz,omitempty"`
+	Cost          string                 `protobuf:"bytes,6,opt,name=cost,proto3" json:"cost,omitempty"`
+	Rpnl          string                 `protobuf:"bytes,8,opt,name=rpnl,proto3" json:"rpnl,omitempty"`
+	Fpnl          string                 `protobuf:"bytes,9,opt,name=fpnl,proto3" json:"fpnl,omitempty"`
+	Fee           string                 `protobuf:"bytes,10,opt,name=fee,proto3" json:"fee,omitempty"`
+	Lpx           *string                `protobuf:"bytes,11,opt,name=lpx,proto3,oneof" json:"lpx,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PositionUpdate_Data_Update) Reset() {
+	*x = PositionUpdate_Data_Update{}
+	mi := &file_ethereal_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PositionUpdate_Data_Update) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PositionUpdate_Data_Update) ProtoMessage() {}
+
+func (x *PositionUpdate_Data_Update) ProtoReflect() protoreflect.Message {
+	mi := &file_ethereal_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PositionUpdate_Data_Update.ProtoReflect.Descriptor instead.
+func (*PositionUpdate_Data_Update) Descriptor() ([]byte, []int) {
+	return file_ethereal_proto_rawDescGZIP(), []int{4, 0, 0}
+}
+
+func (x *PositionUpdate_Data_Update) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *PositionUpdate_Data_Update) GetSid() string {
+	if x != nil {
+		return x.Sid
+	}
+	return ""
+}
+
+func (x *PositionUpdate_Data_Update) GetS() string {
+	if x != nil {
+		return x.S
+	}
+	return ""
+}
+
+func (x *PositionUpdate_Data_Update) GetSide() Side {
+	if x != nil {
+		return x.Side
+	}
+	return Side_SIDE_UNSPECIFIED
+}
+
+func (x *PositionUpdate_Data_Update) GetSz() string {
+	if x != nil {
+		return x.Sz
+	}
+	return ""
+}
+
+func (x *PositionUpdate_Data_Update) GetCost() string {
+	if x != nil {
+		return x.Cost
+	}
+	return ""
+}
+
+func (x *PositionUpdate_Data_Update) GetRpnl() string {
+	if x != nil {
+		return x.Rpnl
+	}
+	return ""
+}
+
+func (x *PositionUpdate_Data_Update) GetFpnl() string {
+	if x != nil {
+		return x.Fpnl
+	}
+	return ""
+}
+
+func (x *PositionUpdate_Data_Update) GetFee() string {
+	if x != nil {
+		return x.Fee
+	}
+	return ""
+}
+
+func (x *PositionUpdate_Data_Update) GetLpx() string {
+	if x != nil && x.Lpx != nil {
+		return *x.Lpx
+	}
+	return ""
+}
+
+type OrderUpdate_Data struct {
+	state         protoimpl.MessageState     `protogen:"open.v1"`
+	T             int64                      `protobuf:"varint,1,opt,name=t,proto3" json:"t,omitempty"`
+	D             []*OrderUpdate_Data_Update `protobuf:"bytes,2,rep,name=d,proto3" json:"d,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *OrderUpdate_Data) Reset() {
+	*x = OrderUpdate_Data{}
+	mi := &file_ethereal_proto_msgTypes[18]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *OrderUpdate_Data) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*OrderUpdate_Data) ProtoMessage() {}
+
+func (x *OrderUpdate_Data) ProtoReflect() protoreflect.Message {
+	mi := &file_ethereal_proto_msgTypes[18]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use OrderUpdate_Data.ProtoReflect.Descriptor instead.
+func (*OrderUpdate_Data) Descriptor() ([]byte, []int) {
+	return file_ethereal_proto_rawDescGZIP(), []int{5, 0}
+}
+
+func (x *OrderUpdate_Data) GetT() int64 {
+	if x != nil {
+		return x.T
+	}
+	return 0
+}
+
+func (x *OrderUpdate_Data) GetD() []*OrderUpdate_Data_Update {
+	if x != nil {
+		return x.D
+	}
+	return nil
+}
+
+type OrderUpdate_Data_Update struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Cloid         string                 `protobuf:"bytes,2,opt,name=cloid,proto3" json:"cloid,omitempty"`
+	Otyp          OrderType              `protobuf:"varint,3,opt,name=otyp,proto3,enum=rim.v1.ethereal.OrderType" json:"otyp,omitempty"`
+	Qty           string                 `protobuf:"bytes,4,opt,name=qty,proto3" json:"qty,omitempty"`
+	Aqty          string                 `protobuf:"bytes,5,opt,name=aqty,proto3" json:"aqty,omitempty"`
+	Fill          string                 `protobuf:"bytes,6,opt,name=fill,proto3" json:"fill,omitempty"`
+	Px            *string                `protobuf:"bytes,7,opt,name=px,proto3,oneof" json:"px,omitempty"`
+	Side          Side                   `protobuf:"varint,8,opt,name=side,proto3,enum=rim.v1.ethereal.Side" json:"side,omitempty"`
+	S             string                 `protobuf:"bytes,9,opt,name=s,proto3" json:"s,omitempty"`
+	Sid           string                 `protobuf:"bytes,10,opt,name=sid,proto3" json:"sid,omitempty"`
+	Sn            string                 `protobuf:"bytes,11,opt,name=sn,proto3" json:"sn,omitempty"`
+	St            string                 `protobuf:"bytes,12,opt,name=st,proto3" json:"st,omitempty"`
+	T             int64                  `protobuf:"varint,13,opt,name=t,proto3" json:"t,omitempty"`
+	Ro            bool                   `protobuf:"varint,14,opt,name=ro,proto3" json:"ro,omitempty"`
+	Cl            bool                   `protobuf:"varint,15,opt,name=cl,proto3" json:"cl,omitempty"`
+	Tif           *string                `protobuf:"bytes,16,opt,name=tif,proto3,oneof" json:"tif,omitempty"`
+	Et            int64                  `protobuf:"varint,17,opt,name=et,proto3" json:"et,omitempty"`
+	Po            *bool                  `protobuf:"varint,18,opt,name=po,proto3,oneof" json:"po,omitempty"`
+	Spx           *string                `protobuf:"bytes,19,opt,name=spx,proto3,oneof" json:"spx,omitempty"`
+	Styp          *uint64                `protobuf:"varint,20,opt,name=styp,proto3,oneof" json:"styp,omitempty"`
+	Spxtyp        *uint64                `protobuf:"varint,21,opt,name=spxtyp,proto3,oneof" json:"spxtyp,omitempty"`
+	Tr            string                 `protobuf:"bytes,22,opt,name=tr,proto3" json:"tr,omitempty"`
+	Gtyp          *uint64                `protobuf:"varint,23,opt,name=gtyp,proto3,oneof" json:"gtyp,omitempty"`
+	Gid           string                 `protobuf:"bytes,24,opt,name=gid,proto3" json:"gid,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *OrderUpdate_Data_Update) Reset() {
+	*x = OrderUpdate_Data_Update{}
+	mi := &file_ethereal_proto_msgTypes[19]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *OrderUpdate_Data_Update) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*OrderUpdate_Data_Update) ProtoMessage() {}
+
+func (x *OrderUpdate_Data_Update) ProtoReflect() protoreflect.Message {
+	mi := &file_ethereal_proto_msgTypes[19]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use OrderUpdate_Data_Update.ProtoReflect.Descriptor instead.
+func (*OrderUpdate_Data_Update) Descriptor() ([]byte, []int) {
+	return file_ethereal_proto_rawDescGZIP(), []int{5, 0, 0}
+}
+
+func (x *OrderUpdate_Data_Update) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *OrderUpdate_Data_Update) GetCloid() string {
+	if x != nil {
+		return x.Cloid
+	}
+	return ""
+}
+
+func (x *OrderUpdate_Data_Update) GetOtyp() OrderType {
+	if x != nil {
+		return x.Otyp
+	}
+	return OrderType_ORDER_TYPE_UNSPECIFIED
+}
+
+func (x *OrderUpdate_Data_Update) GetQty() string {
+	if x != nil {
+		return x.Qty
+	}
+	return ""
+}
+
+func (x *OrderUpdate_Data_Update) GetAqty() string {
+	if x != nil {
+		return x.Aqty
+	}
+	return ""
+}
+
+func (x *OrderUpdate_Data_Update) GetFill() string {
+	if x != nil {
+		return x.Fill
+	}
+	return ""
+}
+
+func (x *OrderUpdate_Data_Update) GetPx() string {
+	if x != nil && x.Px != nil {
+		return *x.Px
+	}
+	return ""
+}
+
+func (x *OrderUpdate_Data_Update) GetSide() Side {
+	if x != nil {
+		return x.Side
+	}
+	return Side_SIDE_UNSPECIFIED
+}
+
+func (x *OrderUpdate_Data_Update) GetS() string {
+	if x != nil {
+		return x.S
+	}
+	return ""
+}
+
+func (x *OrderUpdate_Data_Update) GetSid() string {
+	if x != nil {
+		return x.Sid
+	}
+	return ""
+}
+
+func (x *OrderUpdate_Data_Update) GetSn() string {
+	if x != nil {
+		return x.Sn
+	}
+	return ""
+}
+
+func (x *OrderUpdate_Data_Update) GetSt() string {
+	if x != nil {
+		return x.St
+	}
+	return ""
+}
+
+func (x *OrderUpdate_Data_Update) GetT() int64 {
+	if x != nil {
+		return x.T
+	}
+	return 0
+}
+
+func (x *OrderUpdate_Data_Update) GetRo() bool {
+	if x != nil {
+		return x.Ro
+	}
+	return false
+}
+
+func (x *OrderUpdate_Data_Update) GetCl() bool {
+	if x != nil {
+		return x.Cl
+	}
+	return false
+}
+
+func (x *OrderUpdate_Data_Update) GetTif() string {
+	if x != nil && x.Tif != nil {
+		return *x.Tif
+	}
+	return ""
+}
+
+func (x *OrderUpdate_Data_Update) GetEt() int64 {
+	if x != nil {
+		return x.Et
+	}
+	return 0
+}
+
+func (x *OrderUpdate_Data_Update) GetPo() bool {
+	if x != nil && x.Po != nil {
+		return *x.Po
+	}
+	return false
+}
+
+func (x *OrderUpdate_Data_Update) GetSpx() string {
+	if x != nil && x.Spx != nil {
+		return *x.Spx
+	}
+	return ""
+}
+
+func (x *OrderUpdate_Data_Update) GetStyp() uint64 {
+	if x != nil && x.Styp != nil {
+		return *x.Styp
+	}
+	return 0
+}
+
+func (x *OrderUpdate_Data_Update) GetSpxtyp() uint64 {
+	if x != nil && x.Spxtyp != nil {
+		return *x.Spxtyp
+	}
+	return 0
+}
+
+func (x *OrderUpdate_Data_Update) GetTr() string {
+	if x != nil {
+		return x.Tr
+	}
+	return ""
+}
+
+func (x *OrderUpdate_Data_Update) GetGtyp() uint64 {
+	if x != nil && x.Gtyp != nil {
+		return *x.Gtyp
+	}
+	return 0
+}
+
+func (x *OrderUpdate_Data_Update) GetGid() string {
+	if x != nil {
+		return x.Gid
+	}
+	return ""
+}
+
+type OrderFill_Data struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	T             int64                  `protobuf:"varint,1,opt,name=t,proto3" json:"t,omitempty"`
+	D             []*OrderFill_Data_Fill `protobuf:"bytes,2,rep,name=d,proto3" json:"d,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *OrderFill_Data) Reset() {
+	*x = OrderFill_Data{}
+	mi := &file_ethereal_proto_msgTypes[20]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *OrderFill_Data) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*OrderFill_Data) ProtoMessage() {}
+
+func (x *OrderFill_Data) ProtoReflect() protoreflect.Message {
+	mi := &file_ethereal_proto_msgTypes[20]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use OrderFill_Data.ProtoReflect.Descriptor instead.
+func (*OrderFill_Data) Descriptor() ([]byte, []int) {
+	return file_ethereal_proto_rawDescGZIP(), []int{6, 0}
+}
+
+func (x *OrderFill_Data) GetT() int64 {
+	if x != nil {
+		return x.T
+	}
+	return 0
+}
+
+func (x *OrderFill_Data) GetD() []*OrderFill_Data_Fill {
+	if x != nil {
+		return x.D
+	}
+	return nil
+}
+
+type OrderFill_Data_Fill struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	OrderId       string                 `protobuf:"bytes,2,opt,name=order_id,json=orderId,proto3" json:"order_id,omitempty"`
+	ClientOrderId string                 `protobuf:"bytes,3,opt,name=client_order_id,json=clientOrderId,proto3" json:"client_order_id,omitempty"`
+	Price         string                 `protobuf:"bytes,4,opt,name=price,proto3" json:"price,omitempty"`
+	Filled        string                 `protobuf:"bytes,5,opt,name=filled,proto3" json:"filled,omitempty"`
+	Type          string                 `protobuf:"bytes,6,opt,name=type,proto3" json:"type,omitempty"`
+	Side          Side                   `protobuf:"varint,7,opt,name=side,proto3,enum=rim.v1.ethereal.Side" json:"side,omitempty"`
+	ReduceOnly    bool                   `protobuf:"varint,8,opt,name=reduce_only,json=reduceOnly,proto3" json:"reduce_only,omitempty"`
+	FeeUsd        string                 `protobuf:"bytes,9,opt,name=fee_usd,json=feeUsd,proto3" json:"fee_usd,omitempty"`
+	IsMaker       bool                   `protobuf:"varint,10,opt,name=is_maker,json=isMaker,proto3" json:"is_maker,omitempty"`
+	ProductId     string                 `protobuf:"bytes,11,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
+	SubaccountId  string                 `protobuf:"bytes,12,opt,name=subaccount_id,json=subaccountId,proto3" json:"subaccount_id,omitempty"`
+	CreatedAt     int64                  `protobuf:"varint,13,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *OrderFill_Data_Fill) Reset() {
+	*x = OrderFill_Data_Fill{}
+	mi := &file_ethereal_proto_msgTypes[21]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *OrderFill_Data_Fill) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*OrderFill_Data_Fill) ProtoMessage() {}
+
+func (x *OrderFill_Data_Fill) ProtoReflect() protoreflect.Message {
+	mi := &file_ethereal_proto_msgTypes[21]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use OrderFill_Data_Fill.ProtoReflect.Descriptor instead.
+func (*OrderFill_Data_Fill) Descriptor() ([]byte, []int) {
+	return file_ethereal_proto_rawDescGZIP(), []int{6, 0, 0}
+}
+
+func (x *OrderFill_Data_Fill) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *OrderFill_Data_Fill) GetOrderId() string {
 	if x != nil {
 		return x.OrderId
 	}
 	return ""
 }
 
-func (x *OrderFill) GetClientOrderId() string {
+func (x *OrderFill_Data_Fill) GetClientOrderId() string {
 	if x != nil {
 		return x.ClientOrderId
 	}
 	return ""
 }
 
-func (x *OrderFill) GetPrice() string {
+func (x *OrderFill_Data_Fill) GetPrice() string {
 	if x != nil {
 		return x.Price
 	}
 	return ""
 }
 
-func (x *OrderFill) GetFilled() string {
+func (x *OrderFill_Data_Fill) GetFilled() string {
 	if x != nil {
 		return x.Filled
 	}
 	return ""
 }
 
-func (x *OrderFill) GetType() string {
+func (x *OrderFill_Data_Fill) GetType() string {
 	if x != nil {
 		return x.Type
 	}
 	return ""
 }
 
-func (x *OrderFill) GetSide() int32 {
+func (x *OrderFill_Data_Fill) GetSide() Side {
 	if x != nil {
 		return x.Side
 	}
-	return 0
+	return Side_SIDE_UNSPECIFIED
 }
 
-func (x *OrderFill) GetReduceOnly() bool {
+func (x *OrderFill_Data_Fill) GetReduceOnly() bool {
 	if x != nil {
 		return x.ReduceOnly
 	}
 	return false
 }
 
-func (x *OrderFill) GetFeeUsd() string {
+func (x *OrderFill_Data_Fill) GetFeeUsd() string {
 	if x != nil {
 		return x.FeeUsd
 	}
 	return ""
 }
 
-func (x *OrderFill) GetIsMaker() bool {
+func (x *OrderFill_Data_Fill) GetIsMaker() bool {
 	if x != nil {
 		return x.IsMaker
 	}
 	return false
 }
 
-func (x *OrderFill) GetProductId() string {
+func (x *OrderFill_Data_Fill) GetProductId() string {
 	if x != nil {
 		return x.ProductId
 	}
 	return ""
 }
 
-func (x *OrderFill) GetSubaccountId() string {
+func (x *OrderFill_Data_Fill) GetSubaccountId() string {
 	if x != nil {
 		return x.SubaccountId
 	}
 	return ""
 }
 
-func (x *OrderFill) GetCreatedAt() int64 {
+func (x *OrderFill_Data_Fill) GetCreatedAt() int64 {
 	if x != nil {
 		return x.CreatedAt
 	}
 	return 0
 }
 
-type Transfer struct {
+type TokenTransfer_Data struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	Sid           string                 `protobuf:"bytes,2,opt,name=sid,proto3" json:"sid,omitempty"`
@@ -890,21 +1879,21 @@ type Transfer struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *Transfer) Reset() {
-	*x = Transfer{}
-	mi := &file_ethereal_proto_msgTypes[8]
+func (x *TokenTransfer_Data) Reset() {
+	*x = TokenTransfer_Data{}
+	mi := &file_ethereal_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *Transfer) String() string {
+func (x *TokenTransfer_Data) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*Transfer) ProtoMessage() {}
+func (*TokenTransfer_Data) ProtoMessage() {}
 
-func (x *Transfer) ProtoReflect() protoreflect.Message {
-	mi := &file_ethereal_proto_msgTypes[8]
+func (x *TokenTransfer_Data) ProtoReflect() protoreflect.Message {
+	mi := &file_ethereal_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -915,512 +1904,105 @@ func (x *Transfer) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use Transfer.ProtoReflect.Descriptor instead.
-func (*Transfer) Descriptor() ([]byte, []int) {
-	return file_ethereal_proto_rawDescGZIP(), []int{8}
+// Deprecated: Use TokenTransfer_Data.ProtoReflect.Descriptor instead.
+func (*TokenTransfer_Data) Descriptor() ([]byte, []int) {
+	return file_ethereal_proto_rawDescGZIP(), []int{7, 0}
 }
 
-func (x *Transfer) GetId() string {
+func (x *TokenTransfer_Data) GetId() string {
 	if x != nil {
 		return x.Id
 	}
 	return ""
 }
 
-func (x *Transfer) GetSid() string {
+func (x *TokenTransfer_Data) GetSid() string {
 	if x != nil {
 		return x.Sid
 	}
 	return ""
 }
 
-func (x *Transfer) GetTName() string {
+func (x *TokenTransfer_Data) GetTName() string {
 	if x != nil {
 		return x.TName
 	}
 	return ""
 }
 
-func (x *Transfer) GetTAddr() string {
+func (x *TokenTransfer_Data) GetTAddr() string {
 	if x != nil {
 		return x.TAddr
 	}
 	return ""
 }
 
-func (x *Transfer) GetTyp() string {
+func (x *TokenTransfer_Data) GetTyp() string {
 	if x != nil {
 		return x.Typ
 	}
 	return ""
 }
 
-func (x *Transfer) GetSt() string {
+func (x *TokenTransfer_Data) GetSt() string {
 	if x != nil {
 		return x.St
 	}
 	return ""
 }
 
-func (x *Transfer) GetAmt() string {
+func (x *TokenTransfer_Data) GetAmt() string {
 	if x != nil {
 		return x.Amt
 	}
 	return ""
 }
 
-func (x *Transfer) GetFee() string {
+func (x *TokenTransfer_Data) GetFee() string {
 	if x != nil {
 		return x.Fee
 	}
 	return ""
 }
 
-func (x *Transfer) GetIniBk() string {
+func (x *TokenTransfer_Data) GetIniBk() string {
 	if x != nil && x.IniBk != nil {
 		return *x.IniBk
 	}
 	return ""
 }
 
-func (x *Transfer) GetFinBk() string {
+func (x *TokenTransfer_Data) GetFinBk() string {
 	if x != nil && x.FinBk != nil {
 		return *x.FinBk
 	}
 	return ""
 }
 
-func (x *Transfer) GetIniTx() string {
+func (x *TokenTransfer_Data) GetIniTx() string {
 	if x != nil && x.IniTx != nil {
 		return *x.IniTx
 	}
 	return ""
 }
 
-func (x *Transfer) GetFinTx() string {
+func (x *TokenTransfer_Data) GetFinTx() string {
 	if x != nil && x.FinTx != nil {
 		return *x.FinTx
 	}
 	return ""
 }
 
-func (x *Transfer) GetLzAddr() string {
+func (x *TokenTransfer_Data) GetLzAddr() string {
 	if x != nil && x.LzAddr != nil {
 		return *x.LzAddr
 	}
 	return ""
 }
 
-func (x *Transfer) GetLzEid() string {
+func (x *TokenTransfer_Data) GetLzEid() string {
 	if x != nil && x.LzEid != nil {
 		return *x.LzEid
-	}
-	return ""
-}
-
-type EventMessage struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	E             string                 `protobuf:"bytes,1,opt,name=e,proto3" json:"e,omitempty"`
-	T             int64                  `protobuf:"varint,2,opt,name=t,proto3" json:"t,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *EventMessage) Reset() {
-	*x = EventMessage{}
-	mi := &file_ethereal_proto_msgTypes[9]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *EventMessage) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*EventMessage) ProtoMessage() {}
-
-func (x *EventMessage) ProtoReflect() protoreflect.Message {
-	mi := &file_ethereal_proto_msgTypes[9]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use EventMessage.ProtoReflect.Descriptor instead.
-func (*EventMessage) Descriptor() ([]byte, []int) {
-	return file_ethereal_proto_rawDescGZIP(), []int{9}
-}
-
-func (x *EventMessage) GetE() string {
-	if x != nil {
-		return x.E
-	}
-	return ""
-}
-
-func (x *EventMessage) GetT() int64 {
-	if x != nil {
-		return x.T
-	}
-	return 0
-}
-
-// proto array events //
-// EventMessage "oneof" field is not compatable with these messages
-// protoreflections or custom decoding would be needed to keep the client intact
-type OrderUpdateEvent struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	E             string                 `protobuf:"bytes,1,opt,name=e,proto3" json:"e,omitempty"`
-	T             int64                  `protobuf:"varint,2,opt,name=t,proto3" json:"t,omitempty"`
-	Data          []*OrderUpdate         `protobuf:"bytes,3,rep,name=data,proto3" json:"data,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *OrderUpdateEvent) Reset() {
-	*x = OrderUpdateEvent{}
-	mi := &file_ethereal_proto_msgTypes[10]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *OrderUpdateEvent) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*OrderUpdateEvent) ProtoMessage() {}
-
-func (x *OrderUpdateEvent) ProtoReflect() protoreflect.Message {
-	mi := &file_ethereal_proto_msgTypes[10]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use OrderUpdateEvent.ProtoReflect.Descriptor instead.
-func (*OrderUpdateEvent) Descriptor() ([]byte, []int) {
-	return file_ethereal_proto_rawDescGZIP(), []int{10}
-}
-
-func (x *OrderUpdateEvent) GetE() string {
-	if x != nil {
-		return x.E
-	}
-	return ""
-}
-
-func (x *OrderUpdateEvent) GetT() int64 {
-	if x != nil {
-		return x.T
-	}
-	return 0
-}
-
-func (x *OrderUpdateEvent) GetData() []*OrderUpdate {
-	if x != nil {
-		return x.Data
-	}
-	return nil
-}
-
-type OrderFillEvent struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	E             string                 `protobuf:"bytes,1,opt,name=e,proto3" json:"e,omitempty"`
-	T             int64                  `protobuf:"varint,2,opt,name=t,proto3" json:"t,omitempty"`
-	Data          []*OrderFill           `protobuf:"bytes,3,rep,name=data,proto3" json:"data,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *OrderFillEvent) Reset() {
-	*x = OrderFillEvent{}
-	mi := &file_ethereal_proto_msgTypes[11]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *OrderFillEvent) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*OrderFillEvent) ProtoMessage() {}
-
-func (x *OrderFillEvent) ProtoReflect() protoreflect.Message {
-	mi := &file_ethereal_proto_msgTypes[11]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use OrderFillEvent.ProtoReflect.Descriptor instead.
-func (*OrderFillEvent) Descriptor() ([]byte, []int) {
-	return file_ethereal_proto_rawDescGZIP(), []int{11}
-}
-
-func (x *OrderFillEvent) GetE() string {
-	if x != nil {
-		return x.E
-	}
-	return ""
-}
-
-func (x *OrderFillEvent) GetT() int64 {
-	if x != nil {
-		return x.T
-	}
-	return 0
-}
-
-func (x *OrderFillEvent) GetData() []*OrderFill {
-	if x != nil {
-		return x.Data
-	}
-	return nil
-}
-
-type TradeFillEvent struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	E             string                 `protobuf:"bytes,1,opt,name=e,proto3" json:"e,omitempty"`
-	T             int64                  `protobuf:"varint,2,opt,name=t,proto3" json:"t,omitempty"`
-	Data          *TradeFill             `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *TradeFillEvent) Reset() {
-	*x = TradeFillEvent{}
-	mi := &file_ethereal_proto_msgTypes[12]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *TradeFillEvent) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*TradeFillEvent) ProtoMessage() {}
-
-func (x *TradeFillEvent) ProtoReflect() protoreflect.Message {
-	mi := &file_ethereal_proto_msgTypes[12]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use TradeFillEvent.ProtoReflect.Descriptor instead.
-func (*TradeFillEvent) Descriptor() ([]byte, []int) {
-	return file_ethereal_proto_rawDescGZIP(), []int{12}
-}
-
-func (x *TradeFillEvent) GetE() string {
-	if x != nil {
-		return x.E
-	}
-	return ""
-}
-
-func (x *TradeFillEvent) GetT() int64 {
-	if x != nil {
-		return x.T
-	}
-	return 0
-}
-
-func (x *TradeFillEvent) GetData() *TradeFill {
-	if x != nil {
-		return x.Data
-	}
-	return nil
-}
-
-type SubaccountLiquidationEvent struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	E             string                 `protobuf:"bytes,1,opt,name=e,proto3" json:"e,omitempty"`
-	T             int64                  `protobuf:"varint,2,opt,name=t,proto3" json:"t,omitempty"`
-	Data          *SubaccountLiquidation `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *SubaccountLiquidationEvent) Reset() {
-	*x = SubaccountLiquidationEvent{}
-	mi := &file_ethereal_proto_msgTypes[13]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *SubaccountLiquidationEvent) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*SubaccountLiquidationEvent) ProtoMessage() {}
-
-func (x *SubaccountLiquidationEvent) ProtoReflect() protoreflect.Message {
-	mi := &file_ethereal_proto_msgTypes[13]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use SubaccountLiquidationEvent.ProtoReflect.Descriptor instead.
-func (*SubaccountLiquidationEvent) Descriptor() ([]byte, []int) {
-	return file_ethereal_proto_rawDescGZIP(), []int{13}
-}
-
-func (x *SubaccountLiquidationEvent) GetE() string {
-	if x != nil {
-		return x.E
-	}
-	return ""
-}
-
-func (x *SubaccountLiquidationEvent) GetT() int64 {
-	if x != nil {
-		return x.T
-	}
-	return 0
-}
-
-func (x *SubaccountLiquidationEvent) GetData() *SubaccountLiquidation {
-	if x != nil {
-		return x.Data
-	}
-	return nil
-}
-
-type WebsocketMessage struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	E             string                 `protobuf:"bytes,1,opt,name=e,proto3" json:"e,omitempty"`
-	T             int64                  `protobuf:"varint,2,opt,name=t,proto3" json:"t,omitempty"`
-	Data          *structpb.Struct       `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *WebsocketMessage) Reset() {
-	*x = WebsocketMessage{}
-	mi := &file_ethereal_proto_msgTypes[14]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *WebsocketMessage) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*WebsocketMessage) ProtoMessage() {}
-
-func (x *WebsocketMessage) ProtoReflect() protoreflect.Message {
-	mi := &file_ethereal_proto_msgTypes[14]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use WebsocketMessage.ProtoReflect.Descriptor instead.
-func (*WebsocketMessage) Descriptor() ([]byte, []int) {
-	return file_ethereal_proto_rawDescGZIP(), []int{14}
-}
-
-func (x *WebsocketMessage) GetE() string {
-	if x != nil {
-		return x.E
-	}
-	return ""
-}
-
-func (x *WebsocketMessage) GetT() int64 {
-	if x != nil {
-		return x.T
-	}
-	return 0
-}
-
-func (x *WebsocketMessage) GetData() *structpb.Struct {
-	if x != nil {
-		return x.Data
-	}
-	return nil
-}
-
-type WebsocketStatus struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Ok            bool                   `protobuf:"varint,1,opt,name=ok,proto3" json:"ok,omitempty"`
-	Code          string                 `protobuf:"bytes,2,opt,name=code,proto3" json:"code,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *WebsocketStatus) Reset() {
-	*x = WebsocketStatus{}
-	mi := &file_ethereal_proto_msgTypes[15]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *WebsocketStatus) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*WebsocketStatus) ProtoMessage() {}
-
-func (x *WebsocketStatus) ProtoReflect() protoreflect.Message {
-	mi := &file_ethereal_proto_msgTypes[15]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use WebsocketStatus.ProtoReflect.Descriptor instead.
-func (*WebsocketStatus) Descriptor() ([]byte, []int) {
-	return file_ethereal_proto_rawDescGZIP(), []int{15}
-}
-
-func (x *WebsocketStatus) GetOk() bool {
-	if x != nil {
-		return x.Ok
-	}
-	return false
-}
-
-func (x *WebsocketStatus) GetCode() string {
-	if x != nil {
-		return x.Code
 	}
 	return ""
 }
@@ -1429,80 +2011,148 @@ var File_ethereal_proto protoreflect.FileDescriptor
 
 const file_ethereal_proto_rawDesc = "" +
 	"\n" +
-	"\x0eethereal.proto\x12\x0frim.v1.ethereal\x1a\x1cgoogle/protobuf/struct.proto\"\x94\x01\n" +
+	"\x0eethereal.proto\x12\x0frim.v1.ethereal\x1a\x1cgoogle/protobuf/struct.proto\"\xeb\x01\n" +
 	"\x06L2Book\x12\f\n" +
+	"\x01e\x18\x01 \x01(\tR\x01e\x12\f\n" +
+	"\x01t\x18\x02 \x01(\x03R\x01t\x120\n" +
+	"\x04data\x18\x03 \x01(\v2\x1c.rim.v1.ethereal.L2Book.DataR\x04data\x1a\x92\x01\n" +
+	"\x04Data\x12\f\n" +
 	"\x01s\x18\x01 \x01(\tR\x01s\x12\f\n" +
 	"\x01t\x18\x02 \x01(\x03R\x01t\x12\x13\n" +
 	"\x02pt\x18\x03 \x01(\x03H\x00R\x02pt\x88\x01\x01\x12(\n" +
 	"\x01a\x18\x06 \x03(\v2\x1a.google.protobuf.ListValueR\x01a\x12(\n" +
 	"\x01b\x18\a \x03(\v2\x1a.google.protobuf.ListValueR\x01bB\x05\n" +
-	"\x03_pt\"\xb3\x01\n" +
-	"\vMarketPrice\x12\f\n" +
-	"\x01s\x18\x01 \x01(\tR\x01s\x12\x15\n" +
-	"\x06bid_px\x18\x02 \x01(\tR\x05bidPx\x12\x15\n" +
-	"\x06ask_px\x18\x03 \x01(\tR\x05askPx\x12\x17\n" +
-	"\abid_amt\x18\x04 \x01(\tR\x06bidAmt\x12\x17\n" +
-	"\aask_amt\x18\x05 \x01(\tR\x06askAmt\x12\x17\n" +
-	"\amark_px\x18\x06 \x01(\tR\x06markPx\x12\x1d\n" +
+	"\x03_pt\"\xe2\x03\n" +
+	"\x06Ticker\x12\f\n" +
+	"\x01e\x18\x01 \x01(\tR\x01e\x12\f\n" +
+	"\x01t\x18\x02 \x01(\x03R\x01t\x120\n" +
+	"\x04data\x18\x03 \x01(\v2\x1c.rim.v1.ethereal.Ticker.DataR\x04data\x1a\x89\x03\n" +
+	"\x04Data\x12\f\n" +
+	"\x01s\x18\x01 \x01(\tR\x01s\x12\f\n" +
+	"\x01t\x18\x02 \x01(\x03R\x01t\x12\x1a\n" +
+	"\x06bid_px\x18\x03 \x01(\tH\x00R\x05bidPx\x88\x01\x01\x12\x1a\n" +
+	"\x06ask_px\x18\x04 \x01(\tH\x01R\x05askPx\x88\x01\x01\x12\x1c\n" +
+	"\abid_amt\x18\x05 \x01(\tH\x02R\x06bidAmt\x88\x01\x01\x12\x1c\n" +
+	"\aask_amt\x18\x06 \x01(\tH\x03R\x06askAmt\x88\x01\x01\x12\x1c\n" +
+	"\amark_px\x18\a \x01(\tH\x04R\x06markPx\x88\x01\x01\x12#\n" +
+	"\vmark_px_24h\x18\b \x01(\tH\x05R\tmarkPx24h\x88\x01\x01\x12\x13\n" +
+	"\x02oi\x18\t \x01(\tH\x06R\x02oi\x88\x01\x01\x12\x17\n" +
+	"\x04fr1h\x18\n" +
+	" \x01(\tH\aR\x04fr1h\x88\x01\x01\x12\x1b\n" +
+	"\x06vol24h\x18\v \x01(\tH\bR\x06vol24h\x88\x01\x01B\t\n" +
+	"\a_bid_pxB\t\n" +
+	"\a_ask_pxB\n" +
 	"\n" +
-	"mark24h_px\x18\a \x01(\tR\tmark24hPx\"Z\n" +
+	"\b_bid_amtB\n" +
+	"\n" +
+	"\b_ask_amtB\n" +
+	"\n" +
+	"\b_mark_pxB\x0e\n" +
+	"\f_mark_px_24hB\x05\n" +
+	"\x03_oiB\a\n" +
+	"\x05_fr1hB\t\n" +
+	"\a_vol24h\"\xb0\x02\n" +
+	"\tTradeFill\x12\f\n" +
+	"\x01e\x18\x01 \x01(\tR\x01e\x12\f\n" +
+	"\x01t\x18\x02 \x01(\x03R\x01t\x123\n" +
+	"\x04data\x18\x03 \x01(\v2\x1f.rim.v1.ethereal.TradeFill.DataR\x04data\x1a\xd1\x01\n" +
+	"\x04Data\x12\f\n" +
+	"\x01s\x18\x01 \x01(\tR\x01s\x12\f\n" +
+	"\x01t\x18\x02 \x01(\x03R\x01t\x12:\n" +
+	"\x05fills\x18\x03 \x03(\v2$.rim.v1.ethereal.TradeFill.Data.FillR\x05fills\x1aq\n" +
 	"\x04Fill\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x0e\n" +
 	"\x02px\x18\x02 \x01(\tR\x02px\x12\x0e\n" +
-	"\x02sz\x18\x03 \x01(\tR\x02sz\x12\x0e\n" +
-	"\x02sd\x18\x04 \x01(\x05R\x02sd\x12\x12\n" +
-	"\x04sids\x18\x05 \x03(\tR\x04sids\"F\n" +
-	"\tTradeFill\x12\f\n" +
-	"\x01s\x18\x01 \x01(\tR\x01s\x12+\n" +
-	"\x05fills\x18\x05 \x03(\v2\x15.rim.v1.ethereal.FillR\x05fills\"?\n" +
-	"\x0fLiquidationItem\x12\f\n" +
+	"\x02sz\x18\x03 \x01(\tR\x02sz\x12%\n" +
+	"\x02sd\x18\x04 \x01(\x0e2\x15.rim.v1.ethereal.SideR\x02sd\x12\x12\n" +
+	"\x04sids\x18\x05 \x03(\tR\x04sids\"\xa1\x02\n" +
+	"\x15SubaccountLiquidation\x12\f\n" +
+	"\x01e\x18\x01 \x01(\tR\x01e\x12\f\n" +
+	"\x01t\x18\x02 \x01(\x03R\x01t\x12?\n" +
+	"\x04data\x18\x03 \x01(\v2+.rim.v1.ethereal.SubaccountLiquidation.DataR\x04data\x1a\xaa\x01\n" +
+	"\x04Data\x12\x10\n" +
+	"\x03sid\x18\x01 \x01(\tR\x03sid\x12\f\n" +
+	"\x01t\x18\x02 \x01(\x03R\x01t\x12E\n" +
+	"\x01p\x18\x03 \x03(\v27.rim.v1.ethereal.SubaccountLiquidation.Data.LiquidationR\x01p\x1a;\n" +
+	"\vLiquidation\x12\f\n" +
 	"\x01s\x18\x01 \x01(\tR\x01s\x12\x0e\n" +
 	"\x02px\x18\x02 \x01(\tR\x02px\x12\x0e\n" +
-	"\x02sz\x18\x03 \x01(\tR\x02sz\"Y\n" +
-	"\x15SubaccountLiquidation\x12\x10\n" +
-	"\x03sid\x18\x01 \x01(\tR\x03sid\x12.\n" +
-	"\x01p\x18\x02 \x03(\v2 .rim.v1.ethereal.LiquidationItemR\x01p\"\x82\x06\n" +
-	"\vOrderUpdate\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
-	"\x0fclient_order_id\x18\x02 \x01(\tR\rclientOrderId\x12\x12\n" +
-	"\x04type\x18\x03 \x01(\tR\x04type\x12-\n" +
-	"\x12available_quantity\x18\x04 \x01(\tR\x11availableQuantity\x12\x1a\n" +
-	"\bquantity\x18\x05 \x01(\tR\bquantity\x12\x12\n" +
-	"\x04side\x18\x06 \x01(\x05R\x04side\x12\x1d\n" +
-	"\n" +
-	"product_id\x18\a \x01(\tR\tproductId\x12#\n" +
-	"\rsubaccount_id\x18\b \x01(\tR\fsubaccountId\x12\x16\n" +
-	"\x06status\x18\t \x01(\tR\x06status\x12\x1f\n" +
-	"\vreduce_only\x18\n" +
-	" \x01(\bR\n" +
-	"reduceOnly\x12\x14\n" +
-	"\x05close\x18\v \x01(\bR\x05close\x12\x1d\n" +
-	"\n" +
-	"updated_at\x18\f \x01(\x03R\tupdatedAt\x12\x1d\n" +
-	"\n" +
-	"created_at\x18\r \x01(\x03R\tcreatedAt\x12\x16\n" +
-	"\x06sender\x18\x0e \x01(\tR\x06sender\x12\x14\n" +
-	"\x05price\x18\x0f \x01(\tR\x05price\x12\x16\n" +
-	"\x06filled\x18\x10 \x01(\tR\x06filled\x12\x1d\n" +
-	"\n" +
-	"stop_price\x18\x11 \x01(\tR\tstopPrice\x12\x1b\n" +
-	"\tstop_type\x18\x12 \x01(\x03R\bstopType\x12&\n" +
-	"\x0fstop_price_type\x18\x13 \x01(\x03R\rstopPriceType\x12\"\n" +
-	"\rtime_in_force\x18\x14 \x01(\tR\vtimeInForce\x12\x1d\n" +
-	"\n" +
-	"expires_at\x18\x15 \x01(\x03R\texpiresAt\x12\x1b\n" +
-	"\tpost_only\x18\x16 \x01(\bR\bpostOnly\x124\n" +
-	"\x16group_contingency_type\x18\x17 \x01(\x05R\x14groupContingencyType\x12\x19\n" +
-	"\bgroup_id\x18\x18 \x01(\tR\agroupId\x12\x1c\n" +
-	"\ttriggered\x18\x19 \x01(\tR\ttriggered\"\xec\x02\n" +
-	"\tOrderFill\x12\x0e\n" +
+	"\x02sz\x18\x03 \x01(\tR\x02sz\"\x9b\x03\n" +
+	"\x0ePositionUpdate\x12\f\n" +
+	"\x01e\x18\x01 \x01(\tR\x01e\x12\f\n" +
+	"\x01t\x18\x02 \x01(\x03R\x01t\x128\n" +
+	"\x04data\x18\x03 \x01(\v2$.rim.v1.ethereal.PositionUpdate.DataR\x04data\x1a\xb2\x02\n" +
+	"\x04Data\x12\f\n" +
+	"\x01t\x18\x01 \x01(\x03R\x01t\x129\n" +
+	"\x01d\x18\x02 \x03(\v2+.rim.v1.ethereal.PositionUpdate.Data.UpdateR\x01d\x1a\xe0\x01\n" +
+	"\x06Update\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x10\n" +
+	"\x03sid\x18\x02 \x01(\tR\x03sid\x12\f\n" +
+	"\x01s\x18\x03 \x01(\tR\x01s\x12)\n" +
+	"\x04side\x18\x04 \x01(\x0e2\x15.rim.v1.ethereal.SideR\x04side\x12\x0e\n" +
+	"\x02sz\x18\x05 \x01(\tR\x02sz\x12\x12\n" +
+	"\x04cost\x18\x06 \x01(\tR\x04cost\x12\x12\n" +
+	"\x04rpnl\x18\b \x01(\tR\x04rpnl\x12\x12\n" +
+	"\x04fpnl\x18\t \x01(\tR\x04fpnl\x12\x10\n" +
+	"\x03fee\x18\n" +
+	" \x01(\tR\x03fee\x12\x15\n" +
+	"\x03lpx\x18\v \x01(\tH\x00R\x03lpx\x88\x01\x01B\x06\n" +
+	"\x04_lpx\"\xf7\x05\n" +
+	"\vOrderUpdate\x12\f\n" +
+	"\x01e\x18\x01 \x01(\tR\x01e\x12\f\n" +
+	"\x01t\x18\x02 \x01(\x03R\x01t\x125\n" +
+	"\x04data\x18\x03 \x01(\v2!.rim.v1.ethereal.OrderUpdate.DataR\x04data\x1a\x94\x05\n" +
+	"\x04Data\x12\f\n" +
+	"\x01t\x18\x01 \x01(\x03R\x01t\x126\n" +
+	"\x01d\x18\x02 \x03(\v2(.rim.v1.ethereal.OrderUpdate.Data.UpdateR\x01d\x1a\xc5\x04\n" +
+	"\x06Update\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x14\n" +
+	"\x05cloid\x18\x02 \x01(\tR\x05cloid\x12.\n" +
+	"\x04otyp\x18\x03 \x01(\x0e2\x1a.rim.v1.ethereal.OrderTypeR\x04otyp\x12\x10\n" +
+	"\x03qty\x18\x04 \x01(\tR\x03qty\x12\x12\n" +
+	"\x04aqty\x18\x05 \x01(\tR\x04aqty\x12\x12\n" +
+	"\x04fill\x18\x06 \x01(\tR\x04fill\x12\x13\n" +
+	"\x02px\x18\a \x01(\tH\x00R\x02px\x88\x01\x01\x12)\n" +
+	"\x04side\x18\b \x01(\x0e2\x15.rim.v1.ethereal.SideR\x04side\x12\f\n" +
+	"\x01s\x18\t \x01(\tR\x01s\x12\x10\n" +
+	"\x03sid\x18\n" +
+	" \x01(\tR\x03sid\x12\x0e\n" +
+	"\x02sn\x18\v \x01(\tR\x02sn\x12\x0e\n" +
+	"\x02st\x18\f \x01(\tR\x02st\x12\f\n" +
+	"\x01t\x18\r \x01(\x03R\x01t\x12\x0e\n" +
+	"\x02ro\x18\x0e \x01(\bR\x02ro\x12\x0e\n" +
+	"\x02cl\x18\x0f \x01(\bR\x02cl\x12\x15\n" +
+	"\x03tif\x18\x10 \x01(\tH\x01R\x03tif\x88\x01\x01\x12\x0e\n" +
+	"\x02et\x18\x11 \x01(\x03R\x02et\x12\x13\n" +
+	"\x02po\x18\x12 \x01(\bH\x02R\x02po\x88\x01\x01\x12\x15\n" +
+	"\x03spx\x18\x13 \x01(\tH\x03R\x03spx\x88\x01\x01\x12\x17\n" +
+	"\x04styp\x18\x14 \x01(\x04H\x04R\x04styp\x88\x01\x01\x12\x1b\n" +
+	"\x06spxtyp\x18\x15 \x01(\x04H\x05R\x06spxtyp\x88\x01\x01\x12\x0e\n" +
+	"\x02tr\x18\x16 \x01(\tR\x02tr\x12\x17\n" +
+	"\x04gtyp\x18\x17 \x01(\x04H\x06R\x04gtyp\x88\x01\x01\x12\x10\n" +
+	"\x03gid\x18\x18 \x01(\tR\x03gidB\x05\n" +
+	"\x03_pxB\x06\n" +
+	"\x04_tifB\x05\n" +
+	"\x03_poB\x06\n" +
+	"\x04_spxB\a\n" +
+	"\x05_stypB\t\n" +
+	"\a_spxtypB\a\n" +
+	"\x05_gtyp\"\xa8\x04\n" +
+	"\tOrderFill\x12\f\n" +
+	"\x01e\x18\x01 \x01(\tR\x01e\x12\f\n" +
+	"\x01t\x18\x02 \x01(\x03R\x01t\x123\n" +
+	"\x04data\x18\x03 \x01(\v2\x1f.rim.v1.ethereal.OrderFill.DataR\x04data\x1a\xc9\x03\n" +
+	"\x04Data\x12\f\n" +
+	"\x01t\x18\x01 \x01(\x03R\x01t\x122\n" +
+	"\x01d\x18\x02 \x03(\v2$.rim.v1.ethereal.OrderFill.Data.FillR\x01d\x1a\xfe\x02\n" +
+	"\x04Fill\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x19\n" +
 	"\border_id\x18\x02 \x01(\tR\aorderId\x12&\n" +
 	"\x0fclient_order_id\x18\x03 \x01(\tR\rclientOrderId\x12\x14\n" +
 	"\x05price\x18\x04 \x01(\tR\x05price\x12\x16\n" +
 	"\x06filled\x18\x05 \x01(\tR\x06filled\x12\x12\n" +
-	"\x04type\x18\x06 \x01(\tR\x04type\x12\x12\n" +
-	"\x04side\x18\a \x01(\x05R\x04side\x12\x1f\n" +
+	"\x04type\x18\x06 \x01(\tR\x04type\x12)\n" +
+	"\x04side\x18\a \x01(\x0e2\x15.rim.v1.ethereal.SideR\x04side\x12\x1f\n" +
 	"\vreduce_only\x18\b \x01(\bR\n" +
 	"reduceOnly\x12\x17\n" +
 	"\afee_usd\x18\t \x01(\tR\x06feeUsd\x12\x19\n" +
@@ -1512,8 +2162,12 @@ const file_ethereal_proto_rawDesc = "" +
 	"product_id\x18\v \x01(\tR\tproductId\x12#\n" +
 	"\rsubaccount_id\x18\f \x01(\tR\fsubaccountId\x12\x1d\n" +
 	"\n" +
-	"created_at\x18\r \x01(\x03R\tcreatedAt\"\x8d\x03\n" +
-	"\bTransfer\x12\x0e\n" +
+	"created_at\x18\r \x01(\x03R\tcreatedAt\"\xf0\x03\n" +
+	"\rTokenTransfer\x12\f\n" +
+	"\x01e\x18\x01 \x01(\tR\x01e\x12\f\n" +
+	"\x01t\x18\x02 \x01(\x03R\x01t\x127\n" +
+	"\x04data\x18\x03 \x01(\v2#.rim.v1.ethereal.TokenTransfer.DataR\x04data\x1a\x89\x03\n" +
+	"\x04Data\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x10\n" +
 	"\x03sid\x18\x02 \x01(\tR\x03sid\x12\x15\n" +
 	"\x06t_name\x18\x03 \x01(\tR\x05tName\x12\x15\n" +
@@ -1535,42 +2189,34 @@ const file_ethereal_proto_rawDesc = "" +
 	"\a_fin_txB\n" +
 	"\n" +
 	"\b_lz_addrB\t\n" +
-	"\a_lz_eid\"*\n" +
+	"\a_lz_eid\"\x1c\n" +
 	"\fEventMessage\x12\f\n" +
-	"\x01e\x18\x01 \x01(\tR\x01e\x12\f\n" +
-	"\x01t\x18\x02 \x01(\x03R\x01t\"`\n" +
-	"\x10OrderUpdateEvent\x12\f\n" +
-	"\x01e\x18\x01 \x01(\tR\x01e\x12\f\n" +
-	"\x01t\x18\x02 \x01(\x03R\x01t\x120\n" +
-	"\x04data\x18\x03 \x03(\v2\x1c.rim.v1.ethereal.OrderUpdateR\x04data\"\\\n" +
-	"\x0eOrderFillEvent\x12\f\n" +
-	"\x01e\x18\x01 \x01(\tR\x01e\x12\f\n" +
-	"\x01t\x18\x02 \x01(\x03R\x01t\x12.\n" +
-	"\x04data\x18\x03 \x03(\v2\x1a.rim.v1.ethereal.OrderFillR\x04data\"\\\n" +
-	"\x0eTradeFillEvent\x12\f\n" +
-	"\x01e\x18\x01 \x01(\tR\x01e\x12\f\n" +
-	"\x01t\x18\x02 \x01(\x03R\x01t\x12.\n" +
-	"\x04data\x18\x03 \x01(\v2\x1a.rim.v1.ethereal.TradeFillR\x04data\"t\n" +
-	"\x1aSubaccountLiquidationEvent\x12\f\n" +
-	"\x01e\x18\x01 \x01(\tR\x01e\x12\f\n" +
-	"\x01t\x18\x02 \x01(\x03R\x01t\x12:\n" +
-	"\x04data\x18\x03 \x01(\v2&.rim.v1.ethereal.SubaccountLiquidationR\x04data\"[\n" +
-	"\x10WebsocketMessage\x12\f\n" +
-	"\x01e\x18\x01 \x01(\tR\x01e\x12\f\n" +
-	"\x01t\x18\x02 \x01(\x03R\x01t\x12+\n" +
-	"\x04data\x18\x03 \x01(\v2\x17.google.protobuf.StructR\x04data\"5\n" +
+	"\x01e\x18\x01 \x01(\tR\x01e\"5\n" +
 	"\x0fWebsocketStatus\x12\x0e\n" +
 	"\x02ok\x18\x01 \x01(\bR\x02ok\x12\x12\n" +
-	"\x04code\x18\x02 \x01(\tR\x04code*\xef\x01\n" +
-	"\tEventType\x12\x1a\n" +
-	"\x16EVENT_TYPE_UNSPECIFIED\x10\x00\x12\x16\n" +
-	"\x12EVENT_TYPE_L2_BOOK\x10\x01\x12\x1b\n" +
-	"\x17EVENT_TYPE_MARKET_PRICE\x10\x02\x12%\n" +
-	"!EVENT_TYPE_SUBACCOUNT_LIQUIDATION\x10\x03\x12\x19\n" +
-	"\x15EVENT_TYPE_ORDER_FILL\x10\x04\x12\x1b\n" +
-	"\x17EVENT_TYPE_ORDER_UPDATE\x10\x05\x12\x19\n" +
-	"\x15EVENT_TYPE_TRADE_FILL\x10\x06\x12\x17\n" +
-	"\x13EVENT_TYPE_TRANSFER\x10\aB\x14Z\x12/ethereal-go/pb;pbb\x06proto3"
+	"\x04code\x18\x02 \x01(\tR\x04code*\xb2\x01\n" +
+	"\tEventType\x12\x15\n" +
+	"\x11EVENT_UNSPECIFIED\x10\x00\x12\v\n" +
+	"\aL2_BOOK\x10\x01\x12\n" +
+	"\n" +
+	"\x06TICKER\x10\x02\x12\x0e\n" +
+	"\n" +
+	"TRADE_FILL\x10\x03\x12\x1a\n" +
+	"\x16SUBACCOUNT_LIQUIDATION\x10\x04\x12\x13\n" +
+	"\x0fPOSITION_UPDATE\x10\x05\x12\x10\n" +
+	"\fORDER_UPDATE\x10\x06\x12\x0e\n" +
+	"\n" +
+	"ORDER_FILL\x10\a\x12\x12\n" +
+	"\x0eTOKEN_TRANSFER\x10\b*/\n" +
+	"\x04Side\x12\x14\n" +
+	"\x10SIDE_UNSPECIFIED\x10\x00\x12\a\n" +
+	"\x03BUY\x10\x01\x12\b\n" +
+	"\x04SELL\x10\x02*>\n" +
+	"\tOrderType\x12\x1a\n" +
+	"\x16ORDER_TYPE_UNSPECIFIED\x10\x00\x12\t\n" +
+	"\x05LIMIT\x10\x01\x12\n" +
+	"\n" +
+	"\x06MARKET\x10\x02B\x14Z\x12/ethereal-go/pb;pbb\x06proto3"
 
 var (
 	file_ethereal_proto_rawDescOnce sync.Once
@@ -1584,44 +2230,63 @@ func file_ethereal_proto_rawDescGZIP() []byte {
 	return file_ethereal_proto_rawDescData
 }
 
-var file_ethereal_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_ethereal_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
+var file_ethereal_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
+var file_ethereal_proto_msgTypes = make([]protoimpl.MessageInfo, 23)
 var file_ethereal_proto_goTypes = []any{
-	(EventType)(0),                     // 0: rim.v1.ethereal.EventType
-	(*L2Book)(nil),                     // 1: rim.v1.ethereal.L2Book
-	(*MarketPrice)(nil),                // 2: rim.v1.ethereal.MarketPrice
-	(*Fill)(nil),                       // 3: rim.v1.ethereal.Fill
-	(*TradeFill)(nil),                  // 4: rim.v1.ethereal.TradeFill
-	(*LiquidationItem)(nil),            // 5: rim.v1.ethereal.LiquidationItem
-	(*SubaccountLiquidation)(nil),      // 6: rim.v1.ethereal.SubaccountLiquidation
-	(*OrderUpdate)(nil),                // 7: rim.v1.ethereal.OrderUpdate
-	(*OrderFill)(nil),                  // 8: rim.v1.ethereal.OrderFill
-	(*Transfer)(nil),                   // 9: rim.v1.ethereal.Transfer
-	(*EventMessage)(nil),               // 10: rim.v1.ethereal.EventMessage
-	(*OrderUpdateEvent)(nil),           // 11: rim.v1.ethereal.OrderUpdateEvent
-	(*OrderFillEvent)(nil),             // 12: rim.v1.ethereal.OrderFillEvent
-	(*TradeFillEvent)(nil),             // 13: rim.v1.ethereal.TradeFillEvent
-	(*SubaccountLiquidationEvent)(nil), // 14: rim.v1.ethereal.SubaccountLiquidationEvent
-	(*WebsocketMessage)(nil),           // 15: rim.v1.ethereal.WebsocketMessage
-	(*WebsocketStatus)(nil),            // 16: rim.v1.ethereal.WebsocketStatus
-	(*structpb.ListValue)(nil),         // 17: google.protobuf.ListValue
-	(*structpb.Struct)(nil),            // 18: google.protobuf.Struct
+	(EventType)(0),                                 // 0: rim.v1.ethereal.EventType
+	(Side)(0),                                      // 1: rim.v1.ethereal.Side
+	(OrderType)(0),                                 // 2: rim.v1.ethereal.OrderType
+	(*L2Book)(nil),                                 // 3: rim.v1.ethereal.L2Book
+	(*Ticker)(nil),                                 // 4: rim.v1.ethereal.Ticker
+	(*TradeFill)(nil),                              // 5: rim.v1.ethereal.TradeFill
+	(*SubaccountLiquidation)(nil),                  // 6: rim.v1.ethereal.SubaccountLiquidation
+	(*PositionUpdate)(nil),                         // 7: rim.v1.ethereal.PositionUpdate
+	(*OrderUpdate)(nil),                            // 8: rim.v1.ethereal.OrderUpdate
+	(*OrderFill)(nil),                              // 9: rim.v1.ethereal.OrderFill
+	(*TokenTransfer)(nil),                          // 10: rim.v1.ethereal.TokenTransfer
+	(*EventMessage)(nil),                           // 11: rim.v1.ethereal.EventMessage
+	(*WebsocketStatus)(nil),                        // 12: rim.v1.ethereal.WebsocketStatus
+	(*L2Book_Data)(nil),                            // 13: rim.v1.ethereal.L2Book.Data
+	(*Ticker_Data)(nil),                            // 14: rim.v1.ethereal.Ticker.Data
+	(*TradeFill_Data)(nil),                         // 15: rim.v1.ethereal.TradeFill.Data
+	(*TradeFill_Data_Fill)(nil),                    // 16: rim.v1.ethereal.TradeFill.Data.Fill
+	(*SubaccountLiquidation_Data)(nil),             // 17: rim.v1.ethereal.SubaccountLiquidation.Data
+	(*SubaccountLiquidation_Data_Liquidation)(nil), // 18: rim.v1.ethereal.SubaccountLiquidation.Data.Liquidation
+	(*PositionUpdate_Data)(nil),                    // 19: rim.v1.ethereal.PositionUpdate.Data
+	(*PositionUpdate_Data_Update)(nil),             // 20: rim.v1.ethereal.PositionUpdate.Data.Update
+	(*OrderUpdate_Data)(nil),                       // 21: rim.v1.ethereal.OrderUpdate.Data
+	(*OrderUpdate_Data_Update)(nil),                // 22: rim.v1.ethereal.OrderUpdate.Data.Update
+	(*OrderFill_Data)(nil),                         // 23: rim.v1.ethereal.OrderFill.Data
+	(*OrderFill_Data_Fill)(nil),                    // 24: rim.v1.ethereal.OrderFill.Data.Fill
+	(*TokenTransfer_Data)(nil),                     // 25: rim.v1.ethereal.TokenTransfer.Data
+	(*structpb.ListValue)(nil),                     // 26: google.protobuf.ListValue
 }
 var file_ethereal_proto_depIdxs = []int32{
-	17, // 0: rim.v1.ethereal.L2Book.a:type_name -> google.protobuf.ListValue
-	17, // 1: rim.v1.ethereal.L2Book.b:type_name -> google.protobuf.ListValue
-	3,  // 2: rim.v1.ethereal.TradeFill.fills:type_name -> rim.v1.ethereal.Fill
-	5,  // 3: rim.v1.ethereal.SubaccountLiquidation.p:type_name -> rim.v1.ethereal.LiquidationItem
-	7,  // 4: rim.v1.ethereal.OrderUpdateEvent.data:type_name -> rim.v1.ethereal.OrderUpdate
-	8,  // 5: rim.v1.ethereal.OrderFillEvent.data:type_name -> rim.v1.ethereal.OrderFill
-	4,  // 6: rim.v1.ethereal.TradeFillEvent.data:type_name -> rim.v1.ethereal.TradeFill
-	6,  // 7: rim.v1.ethereal.SubaccountLiquidationEvent.data:type_name -> rim.v1.ethereal.SubaccountLiquidation
-	18, // 8: rim.v1.ethereal.WebsocketMessage.data:type_name -> google.protobuf.Struct
-	9,  // [9:9] is the sub-list for method output_type
-	9,  // [9:9] is the sub-list for method input_type
-	9,  // [9:9] is the sub-list for extension type_name
-	9,  // [9:9] is the sub-list for extension extendee
-	0,  // [0:9] is the sub-list for field type_name
+	13, // 0: rim.v1.ethereal.L2Book.data:type_name -> rim.v1.ethereal.L2Book.Data
+	14, // 1: rim.v1.ethereal.Ticker.data:type_name -> rim.v1.ethereal.Ticker.Data
+	15, // 2: rim.v1.ethereal.TradeFill.data:type_name -> rim.v1.ethereal.TradeFill.Data
+	17, // 3: rim.v1.ethereal.SubaccountLiquidation.data:type_name -> rim.v1.ethereal.SubaccountLiquidation.Data
+	19, // 4: rim.v1.ethereal.PositionUpdate.data:type_name -> rim.v1.ethereal.PositionUpdate.Data
+	21, // 5: rim.v1.ethereal.OrderUpdate.data:type_name -> rim.v1.ethereal.OrderUpdate.Data
+	23, // 6: rim.v1.ethereal.OrderFill.data:type_name -> rim.v1.ethereal.OrderFill.Data
+	25, // 7: rim.v1.ethereal.TokenTransfer.data:type_name -> rim.v1.ethereal.TokenTransfer.Data
+	26, // 8: rim.v1.ethereal.L2Book.Data.a:type_name -> google.protobuf.ListValue
+	26, // 9: rim.v1.ethereal.L2Book.Data.b:type_name -> google.protobuf.ListValue
+	16, // 10: rim.v1.ethereal.TradeFill.Data.fills:type_name -> rim.v1.ethereal.TradeFill.Data.Fill
+	1,  // 11: rim.v1.ethereal.TradeFill.Data.Fill.sd:type_name -> rim.v1.ethereal.Side
+	18, // 12: rim.v1.ethereal.SubaccountLiquidation.Data.p:type_name -> rim.v1.ethereal.SubaccountLiquidation.Data.Liquidation
+	20, // 13: rim.v1.ethereal.PositionUpdate.Data.d:type_name -> rim.v1.ethereal.PositionUpdate.Data.Update
+	1,  // 14: rim.v1.ethereal.PositionUpdate.Data.Update.side:type_name -> rim.v1.ethereal.Side
+	22, // 15: rim.v1.ethereal.OrderUpdate.Data.d:type_name -> rim.v1.ethereal.OrderUpdate.Data.Update
+	2,  // 16: rim.v1.ethereal.OrderUpdate.Data.Update.otyp:type_name -> rim.v1.ethereal.OrderType
+	1,  // 17: rim.v1.ethereal.OrderUpdate.Data.Update.side:type_name -> rim.v1.ethereal.Side
+	24, // 18: rim.v1.ethereal.OrderFill.Data.d:type_name -> rim.v1.ethereal.OrderFill.Data.Fill
+	1,  // 19: rim.v1.ethereal.OrderFill.Data.Fill.side:type_name -> rim.v1.ethereal.Side
+	20, // [20:20] is the sub-list for method output_type
+	20, // [20:20] is the sub-list for method input_type
+	20, // [20:20] is the sub-list for extension type_name
+	20, // [20:20] is the sub-list for extension extendee
+	0,  // [0:20] is the sub-list for field type_name
 }
 
 func init() { file_ethereal_proto_init() }
@@ -1629,15 +2294,18 @@ func file_ethereal_proto_init() {
 	if File_ethereal_proto != nil {
 		return
 	}
-	file_ethereal_proto_msgTypes[0].OneofWrappers = []any{}
-	file_ethereal_proto_msgTypes[8].OneofWrappers = []any{}
+	file_ethereal_proto_msgTypes[10].OneofWrappers = []any{}
+	file_ethereal_proto_msgTypes[11].OneofWrappers = []any{}
+	file_ethereal_proto_msgTypes[17].OneofWrappers = []any{}
+	file_ethereal_proto_msgTypes[19].OneofWrappers = []any{}
+	file_ethereal_proto_msgTypes[22].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_ethereal_proto_rawDesc), len(file_ethereal_proto_rawDesc)),
-			NumEnums:      1,
-			NumMessages:   16,
+			NumEnums:      3,
+			NumMessages:   23,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

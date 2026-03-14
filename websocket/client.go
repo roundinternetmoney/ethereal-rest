@@ -44,7 +44,7 @@ func NewClient(parent context.Context, env Environment) *Client {
 		env:           env,
 		subscriptions: make([]pb.Event[proto.Message], 0),
 		callbacks:     make(map[string]func(proto.Message)),
-		pbOpts:        &protojson.UnmarshalOptions{AllowPartial: true},
+		pbOpts:        &protojson.UnmarshalOptions{DiscardUnknown: true},
 	}
 
 	cl.keepalive(ctx, cancel)
@@ -110,8 +110,8 @@ func (c *Client) Listen(parent context.Context) error {
 			return err
 		}
 
-		var e wssMsg
-		if err := json.Unmarshal(data, &e); err != nil {
+		var e pb.EventMessage
+		if err := c.pbOpts.Unmarshal(data, &e); err != nil {
 			if status := new(pb.WebsocketStatus); c.pbOpts.Unmarshal(data, status) == nil {
 				if !status.Ok {
 					fmt.Println(status.Code)
@@ -122,9 +122,10 @@ func (c *Client) Listen(parent context.Context) error {
 			continue
 		}
 
-		if cb, ok := c.callbacks[e.Event]; ok {
-			event := pb.EventEnum(e.Event)
-			if err = event.UnmarshalToCallback(e.Data, cb); err != nil {
+		if cb, ok := c.callbacks[e.E]; ok {
+			event := pb.EventEnum(e.E)
+			fmt.Println(event.EventName())
+			if err = event.UnmarshalToCallback(data, cb); err != nil {
 				cancel(err)
 				return err
 			}

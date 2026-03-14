@@ -41,7 +41,7 @@ func main() {
 
 	diffCb := func(m proto.Message) {
 		diff := m.(*pb.L2Book)
-		fmt.Printf("diff: %v", diff)
+		fmt.Printf("diff: %v\n", diff)
 	}
 
 	cb := func(m proto.Message) {
@@ -55,9 +55,16 @@ func main() {
 	for symbolKey := range symbols {
 		// callbacks here are overwritten every iteration.
 		// subscribe to book with a protobuf enum, and callback to diffCB
-		if err := ws.SubscribeWithCallback(ctx, pb.EventType_EVENT_TYPE_L2_BOOK, symbolKey, diffCb); err != nil {
+		if err := ws.SubscribeWithCallback(ctx, pb.EventType_L2_BOOK, symbolKey, diffCb); err != nil {
 			log.Fatal("EventType_EVENT_TYPE_L2_BOOK: ", err)
 		}
+		// subscribe to trade fill with a protobuf struct
+		if bytes, err := new(pb.Ticker).MarshalIntent(symbolKey, pb.Sub); err == nil {
+			ws.Req(ctx, bytes)
+		} else {
+			log.Fatal("OrderUpdate: ", err)
+		}
+		ws.OnEvent(new(pb.OrderUpdate), cb)
 		// subscribe to trade fill with a protobuf struct
 		if err := ws.Subscribe(ctx, &pb.TradeFill{}, symbolKey); err != nil {
 			log.Fatal("TradeFill: ", err)
@@ -70,7 +77,7 @@ func main() {
 		log.Fatal("SubaccountLiquidation: ", err)
 	}
 	// subscribe to a order fill protobuf enum, with a callback
-	if err := ws.SubscribeWithCallback(ctx, pb.EventType_EVENT_TYPE_ORDER_FILL, sid, func(m proto.Message) {
+	if err := ws.SubscribeWithCallback(ctx, pb.EventType_ORDER_FILL, sid, func(m proto.Message) {
 		fill := m.(*pb.OrderFill)
 		fmt.Println(fill)
 	}); err != nil {
@@ -85,12 +92,12 @@ func main() {
 	}
 	ws.OnEvent(new(pb.OrderUpdate), cb)
 	// underlying calls of subscribing to a protobuf enum
-	if bytes, err := pb.EventType_EVENT_TYPE_TRANSFER.MarshalIntent(sid, pb.Sub); err == nil {
+	if bytes, err := pb.EventType_TOKEN_TRANSFER.MarshalIntent(sid, pb.Sub); err == nil {
 		ws.Req(ctx, bytes)
 	} else {
 		log.Fatal("EventType_EVENT_TYPE_TRANSFER: ", err)
 	}
-	ws.OnEvent(pb.EventType_EVENT_TYPE_TRANSFER, cb)
+	ws.OnEvent(pb.EventType_TOKEN_TRANSFER, cb)
 
 	errCh := make(chan error, 1)
 	go func() {

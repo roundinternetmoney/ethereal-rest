@@ -1,5 +1,6 @@
 syntax = "proto3";
 
+//option go_package = "/protos;pb";
 option go_package = "/ethereal-go/pb;pb";
 
 package rim.v1.ethereal;
@@ -7,154 +8,203 @@ package rim.v1.ethereal;
 import "google/protobuf/struct.proto";
 
 enum EventType {
-  EVENT_TYPE_UNSPECIFIED = 0;
-  EVENT_TYPE_L2_BOOK = 1;
-  EVENT_TYPE_MARKET_PRICE = 2;
-  EVENT_TYPE_SUBACCOUNT_LIQUIDATION = 3;
-  EVENT_TYPE_ORDER_FILL = 4;
-  EVENT_TYPE_ORDER_UPDATE = 5;
-  EVENT_TYPE_TRADE_FILL = 6;
-  EVENT_TYPE_TRANSFER = 7;
+  EVENT_UNSPECIFIED = 0;
+  L2_BOOK = 1;
+  TICKER = 2;
+  TRADE_FILL = 3;
+  SUBACCOUNT_LIQUIDATION = 4;
+  POSITION_UPDATE = 5;
+  ORDER_UPDATE = 6;
+  ORDER_FILL = 7;
+  TOKEN_TRANSFER = 8;
+}
+
+enum Side {
+    SIDE_UNSPECIFIED = 0;
+    BUY = 1;
+    SELL = 2;
+}
+
+enum OrderType {
+    ORDER_TYPE_UNSPECIFIED = 0;
+    LIMIT = 1;
+    MARKET = 2;
 }
 
 message L2Book {
-    string s = 1;
+    string e = 1;
     int64 t = 2;
-    optional int64 pt = 3;
-    repeated google.protobuf.ListValue a = 6;
-    repeated google.protobuf.ListValue b = 7;
+    message Data {
+        string s = 1;
+        int64 t = 2;
+        optional int64 pt = 3;
+        repeated google.protobuf.ListValue a = 6;
+        repeated google.protobuf.ListValue b = 7;
+    }
+    Data data = 3;
 }
 
-message MarketPrice {
-    string s = 1;
-    string bid_px = 2;
-    string ask_px = 3;
-    string bid_amt = 4;
-    string ask_amt = 5;
-    string mark_px = 6;
-    string mark24h_px = 7;
-}
-
-message Fill {
-    string id = 1;
-    string px = 2;
-    string sz = 3;
-    int32 sd = 4; // todo: side enum. theres 2 more below. 0/1 val
-    repeated string sids = 5; // [taker maker]
+message Ticker {
+    string e = 1;
+    int64 t = 2;
+    message Data {
+        string s = 1;
+        int64 t = 2;
+        optional string bid_px = 3;
+        optional string ask_px = 4;
+        optional string bid_amt = 5;
+        optional string ask_amt = 6;
+        optional string mark_px = 7;
+        optional string mark_px_24h = 8;
+        optional string oi = 9;
+        optional string fr1h = 10;
+        optional string vol24h = 11;
+    }
+    Data data = 3;
 }
 
 message TradeFill {
-    string s = 1;
-    repeated Fill fills = 5;
+    string e = 1;
+    int64 t = 2;    
+    message Data {
+        string s = 1;
+        int64 t = 2;
+        message Fill {
+            string id = 1;
+            string px = 2;
+            string sz = 3;
+            Side sd = 4;
+            repeated string sids = 5; // [taker maker]
+        }    
+        repeated Fill fills = 3;
+    }
+    Data data = 3;
 }
-message LiquidationItem {
-    string s = 1;
-    string px = 2;
-    string sz = 3;
-}
+
 message SubaccountLiquidation {
-    string sid = 1;
-    repeated LiquidationItem p = 2;
+    string e = 1;
+    int64 t = 2;     
+    message Data {
+        string sid = 1;
+        int64 t = 2;        
+        message Liquidation {
+            string s = 1;
+            string px = 2;
+            string sz = 3;
+        }    
+        repeated Liquidation p = 3;
+    }
+    Data data = 3;
+}
+
+message PositionUpdate {
+    string e = 1;
+    int64 t = 2;      
+    message Data {
+        int64 t = 1;
+        message Update {
+            string id = 1;
+            string sid = 2;
+            string s = 3;
+            Side side = 4;
+            string sz = 5;
+            string cost = 6;
+            string rpnl = 8;
+            string fpnl = 9;
+            string fee = 10;
+            optional string lpx = 11;
+        }
+        repeated Update d = 2;
+    }
+    Data data = 3;
 }
 
 message OrderUpdate {
-    string id = 1;
-    string client_order_id = 2;
-    string type = 3;
-    string available_quantity = 4;
-    string quantity = 5;
-    int32 side = 6;
-    string product_id = 7;
-    string subaccount_id = 8;
-    string status = 9;
-    bool reduce_only = 10;
-    bool close = 11;
-    int64 updated_at = 12;
-    int64 created_at = 13;
-    string sender = 14;
-    string price = 15;
-    string filled = 16;
-    string stop_price = 17;
-    int64 stop_type = 18;
-    int64 stop_price_type  = 19;
-    string time_in_force = 20;
-    int64 expires_at = 21;
-    bool post_only = 22;
-    int32 group_contingency_type = 23;
-    string group_id = 24;
-    string triggered = 25;
-
+    string e = 1;
+    int64 t = 2;        
+    message Data {
+        int64 t = 1;
+        message Update {
+            string id = 1;
+            string cloid = 2;
+            OrderType otyp = 3;
+            string qty = 4;
+            string aqty = 5;
+            string fill = 6;
+            optional string px = 7;
+            Side side = 8;
+            string s = 9;
+            string sid = 10;
+            string sn = 11;
+            string st = 12;
+            int64 t = 13;
+            bool ro = 14;
+            bool cl = 15;
+            optional string tif = 16;
+            int64 et = 17;    
+            optional bool po = 18;
+            optional string spx  = 19;
+            optional uint64 styp = 20;
+            optional uint64 spxtyp = 21;
+            string tr = 22;
+            optional uint64 gtyp = 23;
+            string gid = 24;
+        }
+        repeated Update d = 2;
+    }
+    Data data = 3;
 }
+
 message OrderFill {
-    string id = 1;
-    string order_id = 2;
-    string client_order_id = 3;
-    string price = 4;
-    string filled = 5;
-    string type = 6;
-    int32 side = 7;
-    bool reduce_only = 8;
-    string fee_usd = 9;
-    bool is_maker = 10;
-    string product_id = 11;
-    string subaccount_id = 12;
-    int64 created_at = 13;
+    string e = 1;
+    int64 t = 2;   
+    message Data {
+        int64 t = 1;
+        message Fill {
+            string id = 1;
+            string order_id = 2;
+            string client_order_id = 3;
+            string price = 4;
+            string filled = 5;
+            string type = 6;
+            Side side = 7;
+            bool reduce_only = 8;
+            string fee_usd = 9;
+            bool is_maker = 10;
+            string product_id = 11;
+            string subaccount_id = 12;
+            int64 created_at = 13;
+        }
+        repeated Fill d = 2; 
+    }
+    Data data = 3;
 }
 
-message Transfer {
-    string id = 1;
-    string sid = 2;
-    string t_name = 3;
-    string t_addr = 4;
-    string typ = 5;
-    string st = 6;
-    string amt = 7;
-    string fee = 8;
-    optional string ini_bk = 9;
-    optional string fin_bk = 10;
-    optional string ini_tx = 11;
-    optional string fin_tx = 12;
-    optional string lz_addr = 13;
-    optional string lz_eid = 14;
+message TokenTransfer {
+    string e = 1;
+    int64 t = 2;     
+    message Data {
+        string id = 1;
+        string sid = 2;
+        string t_name = 3;
+        string t_addr = 4;
+        string typ = 5;
+        string st = 6;
+        string amt = 7;
+        string fee = 8;
+        optional string ini_bk = 9;
+        optional string fin_bk = 10;
+        optional string ini_tx = 11;
+        optional string fin_tx = 12;
+        optional string lz_addr = 13;
+        optional string lz_eid = 14;
+    }
+    Data data = 3;
 }
 
 message EventMessage {
     string e = 1;
-    int64 t = 2;
 }
-
-// proto array events //
-// EventMessage "oneof" field is not compatable with these messages 
-// protoreflections or custom decoding would be needed to keep the client intact
-message OrderUpdateEvent {
-    string e = 1;
-    int64 t = 2;
-    repeated OrderUpdate data = 3;  
-}
-
-message OrderFillEvent {
-    string e = 1;
-    int64 t = 2;
-    repeated OrderFill data = 3;  
-}
-
-message TradeFillEvent {
-    string e = 1;
-    int64 t = 2;
-    TradeFill data = 3;  
-}
-
-message SubaccountLiquidationEvent {
-    string e = 1;
-    int64 t = 2;
-    SubaccountLiquidation data = 3;  
-}
-
-message WebsocketMessage {
-    string e = 1;
-    int64 t = 2;
-    google.protobuf.Struct data = 3;
-} 
 
 message WebsocketStatus {
     bool ok = 1;
