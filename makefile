@@ -10,7 +10,7 @@ vet:
 	go vet .
 
 test:
-	go test -v rest_client/tests/order_signing/signing_test.go
+	go test -v tests/order_signing/signing_test.go
 
 build:
 	mkdir -p bin

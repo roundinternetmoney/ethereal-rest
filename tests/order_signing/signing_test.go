@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"crypto/ecdsa"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
@@ -9,6 +10,7 @@ import (
 	"testing"
 
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/crypto"
 	abi "github.com/ethereum/go-ethereum/signer/core/apitypes"
 	"github.com/qiwi1272/ethereal-go"
 	"github.com/qiwi1272/ethereal-go/rest"
@@ -143,6 +145,31 @@ func TestOrders(t *testing.T) {
 	}
 }
 
+type TestSigner struct {
+	addr  string
+	pk    *ecdsa.PrivateKey
+	types *abi.TypedData
+}
+
+func getSigner(pk string) (*TestSigner, error) {
+	if ecdsa, err := crypto.HexToECDSA(pk); err == nil {
+		return &TestSigner{
+			addr: crypto.PubkeyToAddress(ecdsa.PublicKey).Hex(),
+			pk:   ecdsa,
+		}, nil
+	} else {
+		return nil, err
+	}
+}
+
+func (s *TestSigner) GetPk() *ecdsa.PrivateKey {
+	return s.pk
+}
+
+func (s *TestSigner) GetTypes() *abi.TypedData {
+	return s.types
+}
+
 // We test signing the order here as well, to ensure that the message encoding is correct.
 // If the encoding is wrong, the signature will also be wrong.
 func TestOrderSigning(t *testing.T) {
@@ -150,9 +177,14 @@ func TestOrderSigning(t *testing.T) {
 	order := getTestOrder()
 	cxt := context.Background()
 	pk := "0bb5d63b84421e1268dda020818ae30cf26e7f10e321fb820a8aa69216dea92a" // private key for 0xdeadbeef...
-	client, err := rest.NewClient(cxt, pk, rest.Testnet)
 
-	fmt.Println("Expected Signer address: ", client.Address)
+	signer, err := getSigner(pk)
+	client, err := rest.NewClient(cxt, pk, rest.Testnet)
+	account := client.GetSubaccount()
+
+	signer.types = client.GetTypes()
+
+	fmt.Println("Expected Signer address: ", account.Account)
 
 	domainHashString, err := client.InitDomain(cxt)
 	if err != nil {
@@ -174,7 +206,7 @@ func TestOrderSigning(t *testing.T) {
 		panic(err)
 	}
 	fmt.Println("Message Hash:", common.Bytes2Hex(messageHash))
-	signature, err := ethereal.Sign(&order, "TradeOrder", client)
+	signature, err := ethereal.Sign(&order, "TradeOrder", signer)
 	if err != nil {
 		panic(err)
 	}
