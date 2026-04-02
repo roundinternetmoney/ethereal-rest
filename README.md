@@ -2,7 +2,7 @@
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/roundinternetmoney/ethereal-rest.svg)](https://pkg.go.dev/github.com/roundinternetmoney/ethereal-rest)
 [![Go Report Card](https://goreportcard.com/badge/github.com/roundinternetmoney/ethereal-rest)](https://goreportcard.com/report/github.com/roundinternetmoney/ethereal-rest)
-[![CI](https://github.com/roundinternetmoney/ethereal-rest/actions/workflows/ci.yml/badge.svg)](https://github.com/roundinternetmoney/ethereal-rest/actions/workflows/ci.yml)
+[![Release](https://github.com/roundinternetmoney/ethereal-rest/actions/workflows/Release.yml/badge.svg)](https://github.com/roundinternetmoney/ethereal-rest/actions/workflows/Release.yml)
 
 Lightweight golang client for interacting with the Ethereal API.
 
