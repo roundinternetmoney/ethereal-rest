@@ -217,13 +217,13 @@ func (e *Client) CancelOrdersFromCreated(ctx context.Context, msg []*OrderCreate
 	return cancel.Send(ctx, e, e.account)
 }
 
-func (e *Client) GetPosition(ctx context.Context) ([]Position, error) {
+func (e *Client) GetPosition(ctx context.Context) ([]*Position, error) {
 	path := fmt.Sprintf("/v1/position?subaccountId=%s&open=%v", e.account.Subaccount.Id, true)
 	data, err := e.Do(ctx, "GET", path, nil)
 	if err != nil {
 		return nil, err
 	}
-	var resp Response[[]Position]
+	var resp Response[[]*Position]
 	if err := json.Unmarshal(data, &resp); err != nil {
 		return nil, err
 	}
