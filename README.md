@@ -25,10 +25,21 @@ Lightweight golang client for interacting with the Ethereal API.
 From the client directory:
 
 - `make examples`
-- `ETHEREAL_PK=0x0000 bin/example_account_balance`
+- Run a binary with your key set, for example: `ETHEREAL_PK=<hex> ./bin/example_account_balance`
 
-For more complete usage examples (batching, cancel orders, etc.),
-see the [examples/](./examples/) folder in this repository.
+All examples read **`ETHEREAL_PK`** (hex private key, with or without `0x` prefix). They target **testnet** by default (`rest.Testnet`).
+
+| Example | Binary (`make examples`) | What it shows |
+|--------|---------------------------|---------------|
+| [examples/account_balance](./examples/account_balance/) | `bin/example_account_balance` | Read-only balances after client init |
+| [examples/limit_single](./examples/limit_single/) | `bin/example_limit_single` | Single limit order, cancel, `Send` helper |
+| [examples/limit_multiple](./examples/limit_multiple/) | `bin/example_limit_multiple` | `CreateOrders` batch + multi-ID cancel |
+| [examples/positions](./examples/positions/) | `bin/example_positions` | Open positions (`GetPosition`) |
+| [examples/cancel_replace](./examples/cancel_replace/) | `bin/example_cancel_replace` | Cancel then submit a new order (replace) |
+| [examples/twap](./examples/twap/) | `bin/example_twap` | **Composition:** time-sliced orders (not a venue TWAP type) |
+| [examples/chase](./examples/chase/) | `bin/example_chase` | **Composition:** cancel/replace loop with a stub reference price |
+
+For more detail, see the [examples/](./examples/) folder and the file comments in `twap` and `chase`.
 
 ## Configuration Notes
 
